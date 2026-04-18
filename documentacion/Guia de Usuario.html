@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MagicMirror² — Guía de Usuario</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --bg2:      #0a0e13;
+      --bg3:      #111827;
+      --border:   #1f2937;
+      --border2:  #374151;
+      --text:     #e5e7eb;
+      --muted:    #6b7280;
+      --accent:   #3b82f6;
+      --accent2:  #60a5fa;
+      --gold:     #d4a017;
+      --green:    #22c55e;
+      --red:      #ef4444;
+      --code-bg:  #161b22;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    nav {
+      width: 260px;
+      min-width: 260px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 32px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    nav .brand {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    nav .brand .logo { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+    nav .brand .name { font-size: 17px; font-weight: 800; color: #f9fafb; }
+    nav .brand .sub  { font-size: 11px; color: var(--muted); }
+
+    nav a {
+      display: block;
+      padding: 7px 24px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.15s, background 0.15s;
+      border-left: 2px solid transparent;
+    }
+    nav a:hover { color: var(--accent2); background: rgba(59,130,246,0.05); }
+    nav a.active { color: var(--accent2); border-left-color: var(--accent); background: rgba(59,130,246,0.08); }
+    nav .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #374151;
+      padding: 20px 24px 6px;
+    }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      max-width: 900px;
+      padding: 48px 56px;
+    }
+
+    /* ── Headers ── */
+    h1 { font-size: 28px; font-weight: 800; color: #f9fafb; margin-bottom: 8px; }
+    h1 span { color: var(--accent); }
+    .lead { color: var(--muted); font-size: 14px; margin-bottom: 48px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+
+    h2 {
+      font-size: 18px; font-weight: 700; color: #f3f4f6;
+      margin: 48px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2 .num {
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      width: 22px; height: 22px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    h3 { font-size: 14px; font-weight: 700; color: #d1d5db; margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    p { color: #9ca3af; margin-bottom: 12px; }
+
+    /* ── URL cards ── */
+    .url-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .url-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .url-card:hover { border-color: var(--border2); }
+    .url-card .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .url-card .info { flex: 1; }
+    .url-card .label { font-size: 13px; font-weight: 700; color: #f3f4f6; margin-bottom: 3px; }
+    .url-card .desc  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .url-card .link  {
+      font-size: 12px;
+      color: var(--accent2);
+      font-family: 'Consolas', 'Cascadia Code', monospace;
+      text-decoration: none;
+      background: var(--code-bg);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 6px;
+      border: 1px solid var(--border);
+    }
+    .url-card .link:hover { border-color: var(--accent); }
+    .url-card .badge {
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      align-self: flex-start;
+    }
+    .badge.get    { background: rgba(34,197,94,0.12);  color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+    .badge.post   { background: rgba(59,130,246,0.12); color: var(--accent2); border: 1px solid rgba(59,130,246,0.25); }
+    .badge.visual { background: rgba(212,160,23,0.12); color: var(--gold); border: 1px solid rgba(212,160,23,0.25); }
+    .badge.file   { background: rgba(107,114,128,0.15); color: #9ca3af; border: 1px solid var(--border); }
+
+    /* ── Code ── */
+    pre, code {
+      font-family: 'Consolas', 'Cascadia Code', 'Courier New', monospace;
+      font-size: 12px;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      color: #c9d1d9;
+      margin-bottom: 16px;
+    }
+    code { background: var(--code-bg); padding: 1px 6px; border-radius: 3px; color: #c9d1d9; font-size: 12px; }
+
+    /* ── Module cards ── */
+    .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .module-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .module-card .m-name { font-size: 13px; font-weight: 700; color: #f3f4f6; margin-bottom: 4px; }
+    .module-card .m-pos  { font-size: 11px; color: var(--accent); font-family: monospace; margin-bottom: 6px; }
+    .module-card .m-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ── Page cards ── */
+    .page-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .page-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .page-card .pnum { font-size: 22px; font-weight: 900; color: var(--accent); min-width: 28px; }
+    .page-card .pname { font-size: 14px; font-weight: 700; color: #f3f4f6; margin-bottom: 4px; }
+    .page-card .pmods { font-size: 12px; color: var(--muted); }
+
+    /* ── Steps ── */
+    .steps { counter-reset: step; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .step {
+      counter-increment: step;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px 14px 52px;
+      position: relative;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+    .step::before {
+      content: counter(step);
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px; height: 24px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: #fff;
+      line-height: 24px;
+      text-align: center;
+    }
+    .step strong { color: #e5e7eb; }
+
+    /* ── Alert box ── */
+    .alert {
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 10px;
+    }
+    .alert.info    { background: rgba(59,130,246,0.08);  border: 1px solid rgba(59,130,246,0.2);  color: #93c5fd; }
+    .alert.warn    { background: rgba(234,179,8,0.08);   border: 1px solid rgba(234,179,8,0.2);   color: #fde68a; }
+    .alert.success { background: rgba(34,197,94,0.08);   border: 1px solid rgba(34,197,94,0.2);   color: #86efac; }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+    th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #9ca3af; vertical-align: top; }
+    td:first-child { color: #d1d5db; font-weight: 500; }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <nav>
+    <div class="brand">
+      <div class="logo">MagicMirror²</div>
+      <div class="name">Guía de Usuario</div>
+      <div class="sub">v2.34.0 · Valencia</div>
+    </div>
+
+    <div class="section-label">Inicio rápido</div>
+    <a href="#arrancar">Arrancar y apagar</a>
+    <a href="#espejo">Ver el espejo</a>
+
+    <div class="section-label">Control</div>
+    <a href="#enlaces">Todos los enlaces</a>
+    <a href="#paginas">Cambiar de página</a>
+    <a href="#remote">Remote Control</a>
+    <a href="#api">API REST</a>
+
+    <div class="section-label">Módulos</div>
+    <a href="#modulos-fijos">Módulos fijos</a>
+    <a href="#pagina1">Página 1 — Inicio</a>
+    <a href="#pagina2">Página 2 — Finanzas</a>
+    <a href="#pagina3">Página 3 — Galería</a>
+
+    <div class="section-label">Archivos</div>
+    <a href="#archivos">Archivos clave</a>
+
+    <div class="section-label">Funcionamiento interno</div>
+    <a href="#int-arranque">Arranque del servidor</a>
+    <a href="#int-browser">Carga en el navegador</a>
+    <a href="#int-notificaciones">Sistema de notificaciones</a>
+    <a href="#int-paginas">Cómo cambian las páginas</a>
+    <a href="#int-conexion">Probar conexión</a>
+    <a href="#int-api">Cómo funciona la API</a>
+    <a href="#int-helpers">Node helpers</a>
+    <a href="#int-lockstrings">Lock strings</a>
+  </nav>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <h1>Magic<span>Mirror²</span> — Guía de Usuario</h1>
+    <p class="lead">Todo lo que necesitas para usar, controlar y entender tu espejo inteligente. Puerto local: <code>3000</code>. Asegúrate de haber ejecutado <code>arrancar.bat</code> antes de abrir cualquier enlace.</p>
+
+    <!-- ══ 1. ARRANCAR ══ -->
+    <h2 id="arrancar"><span class="num">1</span>Arrancar y apagar</h2>
+    <p>En la raíz de la carpeta tienes dos archivos <code>.bat</code>. Doble clic para usarlos.</p>
+
+    <div class="url-grid">
+      <div class="url-card">
+        <div class="icon">▶</div>
+        <div class="info">
+          <div class="label">arrancar.bat</div>
+          <div class="desc">Inicia el servidor MagicMirror en el puerto 3000 y abre automáticamente el navegador en <code>http://localhost:3000</code>.</div>
+        </div>
+        <span class="badge file">BAT</span>
+      </div>
+      <div class="url-card">
+        <div class="icon">■</div>
+        <div class="info">
+          <div class="label">apagar.bat</div>
+          <div class="desc">Detiene el proceso del servidor liberando el puerto 3000. Úsalo siempre que quieras cerrar el espejo limpiamente.</div>
+        </div>
+        <span class="badge file">BAT</span>
+      </div>
+    </div>
+
+    <div class="alert warn">
+      Si ves la página en blanco o los módulos no cargan, espera 5-10 segundos y recarga. Node necesita un momento para inicializar todos los helpers.
+    </div>
+
+    <!-- ══ 2. ESPEJO ══ -->
+    <h2 id="espejo"><span class="num">2</span>Ver el espejo</h2>
+    <p>El espejo es una página web. Puedes verlo en cualquier dispositivo conectado a la misma red.</p>
+
+    <div class="url-grid">
+      <div class="url-card">
+        <div class="icon">🪞</div>
+        <div class="info">
+          <div class="label">Espejo — local</div>
+          <div class="desc">Vista principal del espejo. Muestra todos los módulos activos de la página actual.</div>
+          <a href="http://localhost:3000" target="_blank" class="link">http://localhost:3000</a>
+        </div>
+        <span class="badge visual">VISUAL</span>
+      </div>
+    </div>
+
+    <!-- ══ 3. ENLACES ══ -->
+    <h2 id="enlaces"><span class="num">3</span>Todos los enlaces</h2>
+
+    <h3>Paneles de control</h3>
+    <div class="url-grid">
+      <div class="url-card">
+        <div class="icon">🎛</div>
+        <div class="info">
+          <div class="label">Remote Control</div>
+          <div class="desc">Panel de administración completo. Permite encender/apagar módulos individualmente, cambiar de página, reiniciar el servidor, ver logs y acceder a toda la API desde una interfaz visual.</div>
+          <a href="http://localhost:3000/remote.html" target="_blank" class="link">http://localhost:3000/remote.html</a>
+        </div>
+        <span class="badge visual">VISUAL</span>
+      </div>
+      <div class="url-card">
+        <div class="icon">📄</div>
+        <div class="info">
+          <div class="label">Panel de Páginas</div>
+          <div class="desc">Interfaz simplificada para saltar entre las 3 páginas del espejo con un solo clic. Incluye botón de diagnóstico para verificar la conexión con el servidor.</div>
+          <a href="http://localhost:3000/modules/MMM-Remote-Control/PAGINAS.html" target="_blank" class="link">http://localhost:3000/modules/MMM-Remote-Control/PAGINAS.html</a>
+        </div>
+        <span class="badge visual">VISUAL</span>
+      </div>
+    </div>
+
+    <h3>API REST</h3>
+    <div class="url-grid">
+      <div class="url-card">
+        <div class="icon">⚡</div>
+        <div class="info">
+          <div class="label">Raíz API</div>
+          <div class="desc">Lista todos los endpoints disponibles de la API. Útil para consultar qué operaciones puedes realizar programáticamente.</div>
+          <a href="http://localhost:3000/api/" target="_blank" class="link">http://localhost:3000/api/</a>
+        </div>
+        <span class="badge get">GET</span>
+      </div>
+      <div class="url-card">
+        <div class="icon">📦</div>
+        <div class="info">
+          <div class="label">Listar módulos</div>
+          <div class="desc">Devuelve un JSON con todos los módulos cargados, su estado (visible/oculto) y su configuración. Útil para depurar.</div>
+          <a href="http://localhost:3000/api/module" target="_blank" class="link">http://localhost:3000/api/module</a>
+        </div>
+        <span class="badge get">GET</span>
+      </div>
+    </div>
+
+    <!-- ══ 4. PÁGINAS ══ -->
+    <h2 id="paginas"><span class="num">4</span>Cambiar de página</h2>
+    <p>El espejo tiene 3 páginas gestionadas por el módulo <code>MMM-pages</code>. Puedes cambiar de página de tres formas:</p>
+
+    <div class="page-cards">
+      <div class="page-card">
+        <div class="pnum">1</div>
+        <div>
+          <div class="pname">Inicio</div>
+          <div class="pmods">Reloj digital · Frases motivacionales · Tiempo actual Valencia · Previsión 5 días</div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="pnum">2</div>
+        <div>
+          <div class="pname">Finanzas &amp; Música</div>
+          <div class="pmods">Bitcoin · Dogecoin · Petróleo Crudo (tiempo real) · Reproductor Spotify</div>
+        </div>
+      </div>
+      <div class="page-card">
+        <div class="pnum">3</div>
+        <div>
+          <div class="pname">Galería</div>
+          <div class="pmods">Slideshow de imágenes locales (img1–img7) con rotación cada minuto</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Método 1 — Panel visual</h3>
+    <p>Abre el <a href="http://localhost:3000/modules/MMM-Remote-Control/PAGINAS.html" target="_blank" style="color:var(--accent2)">Panel de Páginas</a> y haz clic en la página deseada.</p>
+
+    <h3>Método 2 — API REST (fetch / curl)</h3>
+    <pre>// Ir a Página 1 (índice 0)
+fetch('http://localhost:3000/api/notification/PAGE_CHANGED', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ payload: 0 })  // 0 = Inicio, 1 = Finanzas, 2 = Galería
+})
+
+// Página siguiente
+fetch('http://localhost:3000/api/notification/PAGE_INCREMENT', { method: 'POST' })
+
+// Página anterior
+fetch('http://localhost:3000/api/notification/PAGE_DECREMENT', { method: 'POST' })</pre>
+
+    <h3>Método 3 — curl</h3>
+    <pre>curl -X POST http://localhost:3000/api/notification/PAGE_CHANGED \
+     -H "Content-Type: application/json" \
+     -d "{\"payload\": 1}"</pre>
+
+    <!-- ══ 5. REMOTE CONTROL ══ -->
+    <h2 id="remote"><span class="num">5</span>Remote Control</h2>
+    <p>El panel en <a href="http://localhost:3000/remote.html" target="_blank" style="color:var(--accent2)">remote.html</a> es el centro de control completo. Desde él puedes:</p>
+
+    <table>
+      <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>Mostrar / ocultar módulo</td><td>Activa o desactiva cualquier módulo sin reiniciar el servidor</td></tr>
+        <tr><td>Cambiar página</td><td>Navega entre las 3 páginas del espejo</td></tr>
+        <tr><td>Reiniciar MagicMirror</td><td>Reinicia el proceso Node sin cerrar la ventana del espejo</td></tr>
+        <tr><td>Actualizar módulo</td><td>Hace git pull del módulo seleccionado</td></tr>
+        <tr><td>Ver notificaciones</td><td>Muestra las notificaciones enviadas entre módulos en tiempo real</td></tr>
+        <tr><td>API Explorer</td><td>Interfaz Swagger para probar endpoints directamente desde el navegador</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ══ 6. API ══ -->
+    <h2 id="api"><span class="num">6</span>Referencia API REST</h2>
+    <p>Todos los endpoints usan la base <code>http://localhost:3000/api/</code>.</p>
+
+    <table>
+      <thead><tr><th>Método</th><th>Endpoint</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>GET</td><td><code>/api/module</code></td><td>Lista todos los módulos y su estado</td></tr>
+        <tr><td>GET</td><td><code>/api/module/:nombre</code></td><td>Estado de un módulo específico</td></tr>
+        <tr><td>POST</td><td><code>/api/module/:nombre/show</code></td><td>Hace visible un módulo oculto</td></tr>
+        <tr><td>POST</td><td><code>/api/module/:nombre/hide</code></td><td>Oculta un módulo</td></tr>
+        <tr><td>POST</td><td><code>/api/notification/PAGE_CHANGED</code></td><td>Salta a la página indicada en <code>payload</code> (0, 1 o 2)</td></tr>
+        <tr><td>POST</td><td><code>/api/notification/PAGE_INCREMENT</code></td><td>Página siguiente</td></tr>
+        <tr><td>POST</td><td><code>/api/notification/PAGE_DECREMENT</code></td><td>Página anterior</td></tr>
+        <tr><td>GET</td><td><code>/api/config</code></td><td>Devuelve la configuración activa</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ══ 7. MÓDULOS FIJOS ══ -->
+    <h2 id="modulos-fijos"><span class="num">7</span>Módulos fijos (siempre visibles)</h2>
+    <p>Estos módulos aparecen en todas las páginas, independientemente de cuál esté activa.</p>
+
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="m-name">alert</div>
+        <div class="m-pos">— sin posición visual —</div>
+        <div class="m-desc">Sistema de notificaciones emergentes nativas. Otros módulos lo usan para mostrar avisos en pantalla.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">MMM-Remote-Control</div>
+        <div class="m-pos">bottom_right</div>
+        <div class="m-desc">Activa la API REST y el panel de control remoto. Sin este módulo, ningún control externo funciona.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">MMM-Page-Indicator</div>
+        <div class="m-pos">bottom_bar</div>
+        <div class="m-desc">Muestra tres puntos en la barra inferior indicando en qué página se encuentra el espejo.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">newsfeed</div>
+        <div class="m-pos">bottom_bar</div>
+        <div class="m-desc">Titulares RSS rotatorios de El País, La Vanguardia y RTVE. Se actualiza cada 5 minutos.</div>
+      </div>
+    </div>
+
+    <!-- ══ 8. PÁGINA 1 ══ -->
+    <h2 id="pagina1"><span class="num">8</span>Página 1 — Inicio</h2>
+
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="m-name">clock</div>
+        <div class="m-pos">top_left</div>
+        <div class="m-desc">Reloj digital en formato 24h. Muestra día y fecha en español. Zona horaria: Europe/Madrid.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">compliments</div>
+        <div class="m-pos">lower_third</div>
+        <div class="m-desc">Frases motivacionales que cambian cada 30 segundos. Distintas según mañana (5-12h), tarde (12-20h) o noche.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">weather (actual)</div>
+        <div class="m-pos">top_right</div>
+        <div class="m-desc">Tiempo actual en Valencia vía OpenWeatherMap. Temperatura, viento, humedad y sensación térmica. Se actualiza cada 10 min.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">weather (previsión)</div>
+        <div class="m-pos">top_right</div>
+        <div class="m-desc">Previsión a 5 días en Valencia. Muestra hasta 10 entradas con fade. Se actualiza cada 30 min.</div>
+      </div>
+    </div>
+
+    <!-- ══ 9. PÁGINA 2 ══ -->
+    <h2 id="pagina2"><span class="num">9</span>Página 2 — Finanzas &amp; Música</h2>
+
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="m-name">MMM-Jast</div>
+        <div class="m-pos">top_right</div>
+        <div class="m-desc">Cotizaciones en tiempo real vía Yahoo Finance. Muestra Bitcoin (BTC-EUR), Dogecoin (DOGE-EUR) y Petróleo Crudo (CL=F en USD). Actualización cada 30 s.</div>
+      </div>
+      <div class="module-card">
+        <div class="m-name">MMM-Spotify</div>
+        <div class="m-pos">bottom_left</div>
+        <div class="m-desc">Reproductor Spotify con carátula, artista, controles de reproducción y volumen. Requiere autenticación previa con <code>auth_windows.js</code>.</div>
+      </div>
+    </div>
+
+    <div class="alert warn">
+      Spotify requiere autenticación OAuth la primera vez. Ejecuta en terminal:<br><br>
+      <code>node modules/MMM-Spotify/auth_windows.js</code><br><br>
+      Sigue las instrucciones que aparecen en el navegador.
+    </div>
+
+    <!-- ══ 10. PÁGINA 3 ══ -->
+    <h2 id="pagina3"><span class="num">10</span>Página 3 — Galería</h2>
+
+    <div class="module-grid">
+      <div class="module-card">
+        <div class="m-name">MMM-SmartWebDisplay</div>
+        <div class="m-pos">middle_center</div>
+        <div class="m-desc">Slideshow de imágenes locales (img1.jpg a img7.jpg). Cambia de imagen cada minuto. Tamaño: 550×550 px.</div>
+      </div>
+    </div>
+
+    <h3>Añadir imágenes propias</h3>
+    <div class="steps">
+      <div class="step"><strong>Copia</strong> tu imagen a <code>modules/MMM-SmartWebDisplay/imagenes_a_mostrar/</code></div>
+      <div class="step"><strong>Nombra</strong> el archivo como <code>img8.jpg</code>, <code>img9.jpg</code>, etc.</div>
+      <div class="step"><strong>Edita</strong> <code>config/config.js</code> y añade la URL siguiendo el mismo patrón que las existentes</div>
+      <div class="step"><strong>Reinicia</strong> el servidor con <code>apagar.bat</code> + <code>arrancar.bat</code></div>
+    </div>
+
+    <!-- ══ 11. ARCHIVOS ══ -->
+    <h2 id="archivos"><span class="num">11</span>Archivos clave</h2>
+
+    <table>
+      <thead><tr><th>Archivo</th><th>Para qué sirve</th></tr></thead>
+      <tbody>
+        <tr><td><code>arrancar.bat</code></td><td>Inicia el servidor y abre el navegador</td></tr>
+        <tr><td><code>apagar.bat</code></td><td>Detiene el servidor</td></tr>
+        <tr><td><code>config/config.js</code></td><td>Configuración principal: módulos, posiciones, claves API, páginas</td></tr>
+        <tr><td><code>modules/MMM-Remote-Control/PAGINAS.html</code></td><td>Panel visual para cambiar de página</td></tr>
+        <tr><td><code>modules/MMM-Remote-Control/DOCUMENTACION_MAGICMIRROR.html</code></td><td>Documentación técnica completa del proyecto</td></tr>
+        <tr><td><code>modules/MMM-Spotify/spotify.config.json</code></td><td>Credenciales OAuth de Spotify (generadas por auth_windows.js)</td></tr>
+        <tr><td><code>modules/MMM-SmartWebDisplay/imagenes_a_mostrar/</code></td><td>Carpeta donde colocar las imágenes de la galería</td></tr>
+        <tr><td><code>css/custom.css</code></td><td>CSS personalizado para sobrescribir estilos sin tocar los módulos</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ══ FUNCIONAMIENTO INTERNO ══ -->
+
+    <h2 id="int-arranque" style="margin-top:80px; border-top: 2px solid var(--border); padding-top:32px;">
+      <span class="num" style="background:var(--gold);color:#000;">i</span>Arranque del servidor — qué ocurre por dentro
+    </h2>
+    <p>Cuando ejecutas <code>node serveronly</code> (o <code>arrancar.bat</code>), se ejecuta esta cadena:</p>
+    <pre>serveronly/index.js
+    └── js/app.js                    ← núcleo de la aplicación
+            ├── Lee config/config.js
+            ├── Valida sintaxis
+            ├── js/server.js          ← crea Express + Socket.IO
+            │       ├── ipAccessControl()     ← whitelist de IPs ([] = todas)
+            │       ├── express.static()      ← sirve /modules, /css, /js...
+            │       └── server.listen(3000)
+            └── Carga node_helpers de cada módulo
+                    ├── MMM-Remote-Control/node_helper.js
+                    ├── MMM-Jast/node_helper.js
+                    ├── MMM-Spotify/node_helper.js
+                    └── newsfeed/node_helper.js</pre>
+    <p>El servidor es <strong>Express</strong> (HTTP clásico) con <strong>Socket.IO</strong> montado encima. Express sirve los archivos estáticos (HTML, CSS, JS de los módulos). Socket.IO es el canal en tiempo real entre Node y el navegador — sin él, los módulos no pueden comunicarse.</p>
+
+    <!-- ══ CARGA BROWSER ══ -->
+    <h2 id="int-browser"><span class="num" style="background:var(--gold);color:#000;">i</span>Carga en el navegador — flujo cliente</h2>
+    <p>Cuando abres <code>http://localhost:3000</code> el navegador hace lo siguiente:</p>
+    <pre>http://localhost:3000
+    └── index.html
+            └── js/main.js
+                    ├── Conecta por WebSocket a Socket.IO
+                    ├── GET /startup  → recibe la config serializada
+                    ├── Carga cada módulo: su .js + su .css
+                    └── Cuando todo está listo:
+                            emite → DOM_OBJECTS_CREATED
+                                └── MMM-pages recibe la notificación
+                                        → oculta todos los módulos que NO son de página 0
+                                        → muestra los de página 0</pre>
+    <p>Los módulos <strong>no se cargan/descargan al cambiar de página</strong>. Todos existen siempre en el DOM. MagicMirror simplemente los muestra u oculta con animación CSS. Por eso el cambio de página es instantáneo.</p>
+
+    <!-- ══ NOTIFICACIONES ══ -->
+    <h2 id="int-notificaciones"><span class="num" style="background:var(--gold);color:#000;">i</span>Sistema de notificaciones — el sistema nervioso</h2>
+    <p>Es el mecanismo que conecta todos los módulos entre sí. Hay dos tipos completamente distintos:</p>
+
+    <h3>Tipo A — Notificaciones internas (módulo → módulo)</h3>
+    <p>Solo viajan dentro del navegador, por JS puro. No pasan por el servidor.</p>
+    <pre>// Un módulo envía:
+this.sendNotification('PAGE_CHANGED', 1)
+
+// Todos los módulos del espejo la reciben en:
+notificationReceived(notification, payload) {
+    if (notification === 'PAGE_CHANGED') { ... }
+}</pre>
+    <p>Así es como <code>MMM-pages</code> recibe la orden de cambiar de página, o como <code>MMM-Page-Indicator</code> sabe qué punto iluminar.</p>
+
+    <h3>Tipo B — Socket notifications (módulo browser ↔ node_helper)</h3>
+    <p>Viajan por WebSocket entre el navegador y el servidor Node. Necesarias cuando un módulo requiere datos externos.</p>
+    <pre>// Módulo en el browser → su node_helper:
+this.sendSocketNotification('FETCH_NEWS', { url: 'https://...' })
+
+// node_helper hace el fetch real desde Node y responde:
+this.sendSocketNotification('NEWS_ITEMS', { items: [...] })
+
+// El módulo en el browser recibe:
+socketNotificationReceived(notification, payload) { ... }</pre>
+    <div class="alert info">
+      Los módulos del browser no pueden hacer peticiones a servicios externos directamente (restricciones CORS, sin acceso al filesystem). Por eso necesitan el node_helper como intermediario.
+    </div>
+
+    <!-- ══ CÓMO CAMBIAN PÁGINAS ══ -->
+    <h2 id="int-paginas"><span class="num" style="background:var(--gold);color:#000;">i</span>Cómo cambian las páginas — flujo completo</h2>
+    <p>Este es el recorrido completo desde que pulsas un botón en PAGINAS.html hasta que el espejo cambia visualmente:</p>
+    <pre>① Usuario pulsa "Finanzas" en PAGINAS.html
+    │
+    ▼
+② fetch POST /api/notification/PAGE_CHANGED  { payload: 1 }
+    │   (petición HTTP desde el navegador al servidor)
+    ▼
+③ MMM-Remote-Control / node_helper.js
+    │   handleNotification() recibe la petición
+    │   → this.sendSocketNotification('NOTIFICATION', { notification: 'PAGE_CHANGED', payload: 1 })
+    ▼
+④ WebSocket → llega al navegador del espejo
+    │
+    ▼
+⑤ MMM-Remote-Control.js (en el browser del espejo)
+    │   → this.sendNotification('PAGE_CHANGED', 1)   ← notificación interna
+    ▼
+⑥ MMM-pages.js  recibe en notificationReceived()
+    │   this.curPage = 1
+    │   this.updatePages()
+    │       └── animatePageChange()
+    │               ├── MM.getModules()
+    │               │     .exceptWithClass(['MMM-Jast','MMM-Spotify'])
+    │               │     .enumerate(m => m.hide(500ms))   ← oculta lo que NO es de pág 1
+    │               └── setTimeout(500ms):
+    │                     MM.getModules()
+    │                       .withClass(['MMM-Jast','MMM-Spotify'])
+    │                       .enumerate(m => m.show(500ms)) ← muestra lo de pág 1
+    ▼
+⑦ MMM-pages envía notificación interna NEW_PAGE → 1
+    │
+    ▼
+⑧ MMM-Page-Indicator recibe NEW_PAGE → actualiza el punto activo en pantalla</pre>
+    <p>Los nombres en <code>withClass / exceptWithClass</code> son literalmente los valores del campo <code>module:</code> en <code>config.js</code>. Por eso es crítico que coincidan exactamente con lo declarado en el array <code>modules</code> de <code>MMM-pages</code>.</p>
+
+    <!-- ══ PROBAR CONEXIÓN ══ -->
+    <h2 id="int-conexion"><span class="num" style="background:var(--gold);color:#000;">i</span>Probar conexión — cómo funciona el botón</h2>
+    <p>El botón "Probar conexión" de PAGINAS.html ejecuta esto:</p>
+    <pre>fetch('http://localhost:3000/api/module', { method: 'GET' })</pre>
+    <table>
+      <thead><tr><th>Resultado</th><th>Significa</th></tr></thead>
+      <tbody>
+        <tr><td>HTTP 200 — "Conexión OK"</td><td>El servidor está corriendo y la API responde correctamente</td></tr>
+        <tr><td>"Sin conexión: Failed to fetch"</td><td>El servidor no está arrancado o el puerto 3000 no es el correcto</td></tr>
+        <tr><td>HTTP 4xx / 5xx</td><td>El servidor responde pero algo falla internamente — revisa los logs en la terminal</td></tr>
+      </tbody>
+    </table>
+    <p>Se usa <code>GET /api/module</code> porque siempre devuelve datos sin efectos secundarios — es la prueba más segura y representativa de que todo el stack funciona.</p>
+
+    <!-- ══ API INTERNA ══ -->
+    <h2 id="int-api"><span class="num" style="background:var(--gold);color:#000;">i</span>Cómo funciona la API REST por dentro</h2>
+    <p><code>MMM-Remote-Control/node_helper.js</code> se engancha directamente al servidor Express principal mediante <code>this.expressApp.get/post(...)</code>. No hay un servidor separado — todas las rutas <code>/api/...</code> viven en el mismo proceso Node que sirve el espejo.</p>
+    <pre>// Dentro de node_helper.js:
+this.expressApp.post('/api/notification/:name', (req, res) => {
+    const notification = req.params.name   // ej: PAGE_CHANGED
+    const payload      = req.body.payload  // ej: 1
+
+    // Lo envía por WebSocket al browser del espejo:
+    this.sendSocketNotification('NOTIFICATION', { notification, payload })
+
+    res.json({ success: true })
+})</pre>
+    <p>El flujo completo de cualquier llamada API es siempre: <strong>HTTP → node_helper → WebSocket → módulo browser → notificación interna → acción visual</strong>.</p>
+
+    <!-- ══ NODE HELPERS ══ -->
+    <h2 id="int-helpers"><span class="num" style="background:var(--gold);color:#000;">i</span>Node helpers — para qué sirven</h2>
+    <p>Cada módulo que necesita datos externos tiene un archivo <code>node_helper.js</code> que corre en Node.js, separado del código del browser.</p>
+    <table>
+      <thead><tr><th>Módulo</th><th>Qué hace su node_helper</th></tr></thead>
+      <tbody>
+        <tr><td><code>newsfeed</code></td><td>Descarga y parsea los RSS feeds cada 5 min. El browser solo recibe los titulares ya procesados.</td></tr>
+        <tr><td><code>MMM-Jast</code></td><td>Consulta Yahoo Finance cada 30 s. Evita problemas CORS que tendría si lo hiciera el browser.</td></tr>
+        <tr><td><code>MMM-Spotify</code></td><td>Gestiona el token OAuth (refresco automático) y consulta la API de Spotify.</td></tr>
+        <tr><td><code>MMM-Remote-Control</code></td><td>Expone todos los endpoints REST, gestiona el config.js y controla los módulos.</td></tr>
+        <tr><td><code>calendar</code></td><td>Descarga y parsea ficheros <code>.ics</code> de calendarios remotos.</td></tr>
+      </tbody>
+    </table>
+    <p>Los módulos <strong>sin</strong> node_helper (<code>clock</code>, <code>compliments</code>, <code>MMM-pages</code>, <code>MMM-Page-Indicator</code>) funcionan completamente en el browser y no necesitan datos externos.</p>
+
+    <!-- ══ LOCK STRINGS ══ -->
+    <h2 id="int-lockstrings"><span class="num" style="background:var(--gold);color:#000;">i</span>Lock strings — por qué los módulos no se pisan</h2>
+    <p>Cuando <code>MMM-pages</code> oculta un módulo, le pone un "candado" con su propio identificador. Esto evita que Remote Control u otro sistema lo muestre accidentalmente mientras el sistema de páginas lo tiene oculto.</p>
+    <pre>// MMM-pages oculta con su lock string:
+module.hide(500, callback, { lockString: 'MMM-pages' })
+
+// Solo puede volver a mostrarlo quien tenga ese mismo lock string:
+module.show(500, callback, { lockString: 'MMM-pages' })</pre>
+    <p>Sin lock strings, si usas Remote Control para ocultar un módulo y luego cambias de página, <code>MMM-pages</code> lo mostraría igualmente al intentar mostrar los módulos de esa página. Los lock strings garantizan que cada sistema controla solo lo que él mismo ocultó.</p>
+
+    <footer>
+      MagicMirror² v2.34.0 · Valencia, España · Puerto local: 3000
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Highlight nav link on scroll
+  const sections = document.querySelectorAll('h2[id]');
+  const navLinks  = document.querySelectorAll('nav a');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+
+</body>
+</html>
