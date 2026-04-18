@@ -1,0 +1,27 @@
+[submodule "modules/MMM-Remote-Control"]
+	path = modules/MMM-Remote-Control
+	url = https://github.com/Jopyth/MMM-Remote-Control.git
+[submodule "modules/MMM-Page-Indicator"]
+	path = modules/MMM-Page-Indicator
+	url = https://github.com/edward-shen/MMM-page-indicator.git
+[submodule "modules/MMM-Jast"]
+	path = modules/MMM-Jast
+	url = https://github.com/jalibu/MMM-Jast.git
+[submodule "modules/MMM-Spotify"]
+	path = modules/MMM-Spotify
+	url = https://github.com/skuethe/MMM-Spotify
+[submodule "modules/MMM-SmartWebDisplay"]
+	path = modules/MMM-SmartWebDisplay
+	url = https://github.com/AgP42/MMM-SmartWebDisplay.git
+[submodule "modules/MMM-pages"]
+	path = modules/MMM-pages
+	url = https://github.com/edward-shen/MMM-pages.git
+[submodule "modules/MMM-CardDavBirthdaysProvider"]
+	path = modules/MMM-CardDavBirthdaysProvider
+	url = https://github.com/ulrichwisser/MMM-CardDavBirthdaysProvider.git
+[submodule "modules/MMM-Carousel"]
+	path = modules/MMM-Carousel
+	url = https://github.com/shbatm/MMM-Carousel.git
+[submodule "modules/MMM-OpenWeatherForecast"]
+	path = modules/MMM-OpenWeatherForecast
+	url = https://github.com/jclarke0000/MMM-OpenWeatherForecast.git

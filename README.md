@@ -1,6 +1,93 @@
-# MagicMirror² — Setup Personal
+# MagicMirror² — Backup Completo
 
-Configuración personal de [MagicMirror²](https://magicmirror.builders/) con sistema multipágina, cotizaciones en tiempo real, Spotify, galería de imágenes y control remoto vía API REST.
+Backup completo de la instalación personal de [MagicMirror²](https://magicmirror.builders/). Incluye todos los módulos como submodules de git, configuración, documentación y scripts auxiliares.
+
+---
+
+## Restauración completa en Windows
+
+### Prerrequisitos
+
+- [Node.js](https://nodejs.org/) >= 20 (incluye npm)
+- [Git for Windows](https://git-scm.com/download/win)
+- [Python 3](https://www.python.org/downloads/) (solo si usas los scripts de gestos de `manos/`)
+
+### Pasos
+
+**1. Clonar el repo con todos los submodules**
+
+```bash
+git clone --recurse-submodules https://github.com/trripe1/Magic-Mirror-Complete-Backup.git
+cd Magic-Mirror-Complete-Backup
+```
+
+> Si ya clonaste sin `--recurse-submodules`, ejecuta dentro de la carpeta:
+> ```bash
+> git submodule update --init --recursive
+> ```
+
+**2. Instalar dependencias del núcleo**
+
+```bash
+npm install
+```
+
+**3. Instalar dependencias de cada módulo**
+
+```bash
+cd modules/MMM-pages && npm install && cd ../..
+cd modules/MMM-Page-Indicator && npm install && cd ../..
+cd modules/MMM-Remote-Control && npm install && cd ../..
+cd modules/MMM-Jast && npm install && cd ../..
+cd modules/MMM-Spotify && npm install && cd ../..
+cd modules/MMM-SmartWebDisplay && npm install && cd ../..
+cd modules/MMM-Carousel && npm install && cd ../..
+cd modules/MMM-OpenWeatherForecast && npm install && cd ../..
+```
+
+**4. Crear el archivo de configuración**
+
+```bash
+copy config\config.js.sample config\config.js
+```
+
+Abre `config/config.js` y reemplaza `YOUR_OPENWEATHERMAP_API_KEY` con tu clave de [OpenWeatherMap](https://openweathermap.org/api).
+
+**5. Configurar Spotify**
+
+Crea `modules/MMM-Spotify/spotify.config.json` con tus credenciales (usa `spotify.config.json.example-single` como plantilla):
+
+```json
+[
+  {
+    "USERNAME": "tu_usuario_spotify",
+    "CLIENT_ID": "tu_client_id",
+    "CLIENT_SECRET": "tu_client_secret",
+    "TOKEN": "./USERNAME_token.json",
+    "REDIRECT_URI": "http://TU_IP_LOCAL:8888/callback"
+  }
+]
+```
+
+Autentica (solo una vez):
+
+```bash
+node modules/MMM-Spotify/auth_windows.js
+```
+
+**6. Restaurar imágenes de la galería**
+
+Copia tus imágenes en `modules/MMM-SmartWebDisplay/imagenes_a_mostrar/` con los nombres `img1.jpg` … `img7.jpg`.
+
+**7. Arrancar**
+
+```bash
+npm start
+```
+
+Accesible en `http://localhost:8080`
+
+---
 
 ---
 
