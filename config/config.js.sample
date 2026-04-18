@@ -1,110 +1,286 @@
-/* Config Sample
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║  MagicMirror²  ·  config.js  ·  v2.34.0                               ║
+ * ╠══════════════════════════╦═════════════════════════════════════════════╣
+ * ║  Pág. 1 — Inicio         ║  clock  ·  compliments  ·  weather         ║
+ * ║  Pág. 2 — Finanzas       ║  MMM-Jast  ·  MMM-Spotify                  ║
+ * ║  Pág. 3 — Galería        ║  MMM-SmartWebDisplay                       ║
+ * ╠══════════════════════════╩═════════════════════════════════════════════╣
+ * ║  Fijos  →  alert · MMM-Remote-Control · MMM-Page-Indicator · newsfeed ║
+ * ╠══════════════════════════════════════════════════════════════════════════╣
+ * ║  Control de páginas                                                     ║
+ * ║  · Panel  →  http://localhost:3000/modules/                            ║
+ * ║              MMM-Remote-Control/PAGINAS.html                           ║
+ * ║  · API    →  POST /api/notification/PAGE_CHANGED  {"payload": 0|1|2}  ║
+ * ╠══════════════════════════════════════════════════════════════════════════╣
+ * ║  Primer arranque                                                        ║
+ * ║  · Spotify  →  node modules/MMM-Spotify/auth_windows.js               ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
  *
- * For more information on how you can configure this file
- * see https://docs.magicmirror.builders/configuration/introduction.html
- * and https://docs.magicmirror.builders/modules/configuration.html
- *
- * You can use environment variables using a `config.js.template` file instead of `config.js`
- * which will be converted to `config.js` while starting. For more information
- * see https://docs.magicmirror.builders/configuration/introduction.html#enviromnent-variables
+ * INSTRUCCIONES:
+ *  1. Copia este archivo:  cp config.js.sample config.js
+ *  2. Reemplaza los placeholders marcados con YOUR_*:
+ *     · YOUR_OPENWEATHERMAP_API_KEY  →  https://openweathermap.org/api
+ *  3. Configura Spotify (solo una vez):
+ *     node modules/MMM-Spotify/auth_windows.js
  */
+
 let config = {
-	address: "localhost",	// Address to listen on, can be:
-							// - "localhost", "127.0.0.1", "::1" to listen on loopback interface
-							// - another specific IPv4/6 to listen on a specific interface
-							// - "0.0.0.0", "::" to listen on any interface
-							// Default, when address config is left out or empty, is "localhost"
-	port: 8080,
-	basePath: "/",	// The URL path where MagicMirror² is hosted. If you are using a Reverse proxy
-									// you must set the sub path here. basePath must end with a /
-	ipWhitelist: ["127.0.0.1", "::ffff:127.0.0.1", "::1"],	// Set [] to allow all IP addresses
-									// or add a specific IPv4 of 192.168.1.5 :
-									// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
-									// or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
-									// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
 
-	useHttps: false,			// Support HTTPS or not, default "false" will use HTTP
-	httpsPrivateKey: "",	// HTTPS private key path, only require when useHttps is true
-	httpsCertificate: "",	// HTTPS Certificate path, only require when useHttps is true
+  /* ── SERVIDOR ────────────────────────────────────────────────────────────── */
 
-	language: "en",
-	locale: "en-US",   // this variable is provided as a consistent location
-			   // it is currently only used by 3rd party modules. no MagicMirror code uses this value
-			   // as we have no usage, we  have no constraints on what this field holds
-			   // see https://en.wikipedia.org/wiki/Locale_(computer_software) for the possibilities
+  address:   "0.0.0.0",
+  port:      8080,
+  basePath:  "/",
+  ipWhitelist: [],
 
-	logLevel: ["INFO", "LOG", "WARN", "ERROR"], // Add "DEBUG" for even more logging
-	timeFormat: 24,
-	units: "metric",
+  /* ── HTTPS ───────────────────────────────────────────────────────────────── */
 
-	modules: [
-		{
-			module: "alert",
-		},
-		{
-			module: "updatenotification",
-			position: "top_bar"
-		},
-		{
-			module: "clock",
-			position: "top_left"
-		},
-		{
-			module: "calendar",
-			header: "US Holidays",
-			position: "top_left",
-			config: {
-				calendars: [
-					{
-						fetchInterval: 7 * 24 * 60 * 60 * 1000,
-						symbol: "calendar-check",
-						url: "https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics"
-					}
-				]
-			}
-		},
-		{
-			module: "compliments",
-			position: "lower_third"
-		},
-		{
-			module: "weather",
-			position: "top_right",
-			config: {
-				weatherProvider: "openmeteo",
-				type: "current",
-				lat: 40.776676,
-				lon: -73.971321
-			}
-		},
-		{
-			module: "weather",
-			position: "top_right",
-			header: "Weather Forecast",
-			config: {
-				weatherProvider: "openmeteo",
-				type: "forecast",
-				lat: 40.776676,
-				lon: -73.971321
-			}
-		},
-		{
-			module: "newsfeed",
-			position: "bottom_bar",
-			config: {
-				feeds: [
-					{
-						title: "New York Times",
-						url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
-					}
-				],
-				showSourceTitle: true,
-				showPublishDate: true,
-				broadcastNewsFeeds: true,
-				broadcastNewsUpdates: true
-			}
-		},
-	]
+  useHttps:         false,
+  httpsPrivateKey:  "",
+  httpsCertificate: "",
+
+  /* ── LOCALIZACIÓN ────────────────────────────────────────────────────────── */
+
+  language:   "es",
+  locale:     "es-EU",
+  timeFormat: 24,
+  units:      "metric",
+
+  /* ── LOGGING ─────────────────────────────────────────────────────────────── */
+
+  logLevel: ["INFO", "LOG", "WARN", "ERROR"],
+
+
+  /* ══════════════════════════════════════════════════════════════════════════
+   *  MÓDULOS
+   * ══════════════════════════════════════════════════════════════════════════ */
+
+  modules: [
+
+
+    /* ┌──────────────────────────────────────────────────────────────────────┐
+     * │  § 0  MÓDULOS FIJOS — siempre visibles en todas las páginas         │
+     * └──────────────────────────────────────────────────────────────────────┘ */
+
+    { module: "alert" },
+
+    {
+      module:   "MMM-Remote-Control",
+      position: "bottom_right",
+      config: {
+        showModuleApiMenu: true,
+        secureEndpoints:   false
+      }
+    },
+
+    {
+      module:   "MMM-Page-Indicator",
+      position: "bottom_bar",
+      config: {
+        pages: 3
+      }
+    },
+
+    {
+      module:   "newsfeed",
+      position: "bottom_bar",
+      config: {
+        feeds: [
+          { title: "El País",       url: "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada" },
+          { title: "La Vanguardia", url: "https://www.lavanguardia.com/rss/home.xml" },
+          { title: "RTVE Noticias", url: "https://www.rtve.es/api/noticias.rss" }
+        ],
+        showSourceTitle:      true,
+        showPublishDate:      false,
+        updateInterval:       7500,
+        reloadInterval:       300000,
+        animationSpeed:       2500,
+        maxNewsItems:         10,
+        hideLoading:          true,
+        broadcastNewsFeeds:   true,
+        broadcastNewsUpdates: true
+      }
+    },
+
+
+    /* ┌──────────────────────────────────────────────────────────────────────┐
+     * │  § 1  PÁGINA 1 — Inicio                                             │
+     * └──────────────────────────────────────────────────────────────────────┘ */
+
+    {
+      module:   "clock",
+      position: "top_left",
+      config: {
+        displayType:    "digital",
+        timeFormat:     24,
+        displaySeconds: false,
+        showDate:       true,
+        dateFormat:     "dddd, D MMMM",
+        showWeek:       false,
+        timezone:       "Europe/Madrid"
+      }
+    },
+
+    {
+      module:   "compliments",
+      position: "lower_third",
+      config: {
+        morningStartTime:   5,
+        morningEndTime:     12,
+        afternoonStartTime: 12,
+        afternoonEndTime:   20,
+        fadeSpeed:      4000,
+        updateInterval: 30000
+      }
+    },
+
+    {
+      module:   "weather",
+      position: "top_right",
+      header:   "Tu ciudad",
+      config: {
+        weatherProvider:  "openweathermap",
+        weatherEndpoint:  "/weather",
+        apiVersion:       "2.5",
+        apiKey:           "YOUR_OPENWEATHERMAP_API_KEY",
+        location:         "TU_CIUDAD,ES",
+        units:            "metric",
+        lang:             "es",
+        updateInterval:   600000,
+        showWindDirection: true,
+        showHumidity:      true,
+        showFeelsLike:     true
+      }
+    },
+
+    {
+      module:   "weather",
+      position: "top_right",
+      header:   "Previsión",
+      config: {
+        weatherProvider:  "openweathermap",
+        weatherEndpoint:  "/forecast",
+        apiVersion:       "2.5",
+        apiKey:           "YOUR_OPENWEATHERMAP_API_KEY",
+        location:         "TU_CIUDAD,ES",
+        units:            "metric",
+        lang:             "es",
+        updateInterval:   1800000,
+        type:             "forecast",
+        maxNumberOfDays:  5,
+        maxEntries:       10,
+        fade:             true
+      }
+    },
+
+
+    /* ┌──────────────────────────────────────────────────────────────────────┐
+     * │  § 2  PÁGINA 2 — Finanzas & Música                                 │
+     * └──────────────────────────────────────────────────────────────────────┘ */
+
+    {
+      module:   "MMM-Jast",
+      position: "top_right",
+      config: {
+        currencyStyle:             "code",
+        fadeSpeedInSeconds:        3,
+        displayMode:               "vertical",
+        numberDecimalsValues:      2,
+        numberDecimalsPercentages: 1,
+        showColors:                true,
+        showCurrency:              true,
+        showChangePercent:         true,
+        showChangeValue:           true,
+        showChangeValueCurrency:   false,
+        showLastUpdate:            true,
+        showHiddenStocks:          false,
+        stocksPerPage:             3,
+        useGrouping:               true,
+        updateIntervalInSeconds:   30,
+        stocks: [
+          { name: "Bitcoin",        symbol: "BTC-EUR"  },
+          { name: "Dogecoin",       symbol: "DOGE-EUR" },
+          { name: "Petróleo Crudo", symbol: "CL=F"     }
+        ]
+      }
+    },
+
+    {
+      module:   "MMM-Spotify",
+      position: "bottom_left",
+      config: {
+        style:             "default",
+        moduleWidth:       360,
+        control:           "default",
+        showAlbumLabel:    true,
+        showVolumeLabel:   true,
+        showAccountButton: true,
+        showDeviceButton:  true,
+        showAccountName:   false,
+        updateInterval:    1000,
+        idleInterval:      10000,
+        defaultAccount:    0,
+        volumeSteps:       5,
+        deviceDisplay:     "Reproduciendo en"
+      }
+    },
+
+
+    /* ┌──────────────────────────────────────────────────────────────────────┐
+     * │  § 3  PÁGINA 3 — Galería                                            │
+     * └──────────────────────────────────────────────────────────────────────┘ */
+
+    {
+      module:   "MMM-SmartWebDisplay",
+      position: "middle_center",
+      config: {
+        url: [
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img1.jpg",
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img2.jpg",
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img3.jpg",
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img4.jpg",
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img5.jpg",
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img6.jpg",
+          "http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img7.jpg"
+        ],
+        updateInterval:    0,
+        NextURLInterval:   1,
+        width:             "550px",
+        height:            "550px",
+        scrolling:         "no",
+        displayLastUpdate: false,
+        logDebug:          false
+      }
+    },
+
+
+    /* ┌──────────────────────────────────────────────────────────────────────┐
+     * │  § —  MMM-PAGES — controlador del sistema multipágina              │
+     * └──────────────────────────────────────────────────────────────────────┘ */
+
+    {
+      module: "MMM-pages",
+      config: {
+        modules: [
+          ["clock", "compliments", "weather"],
+          ["MMM-Jast", "MMM-Spotify"],
+          ["MMM-SmartWebDisplay"]
+        ],
+        fixed: [
+          "alert",
+          "MMM-Remote-Control",
+          "MMM-Page-Indicator",
+          "newsfeed"
+        ],
+        homePage:      0,
+        timings:       { default: 0 },
+        rotationDelay: 10000,
+        animationTime: 1000
+      }
+    }
+
+
+  ]
 };
 
 /*************** DO NOT EDIT THE LINE BELOW ***************/

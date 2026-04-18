@@ -1,55 +1,146 @@
-# ![MagicMirror²: The open source modular smart mirror platform.](.github/header.png)
+# MagicMirror² — Setup Personal
 
-<p style="text-align: center">
-  <a href="https://choosealicense.com/licenses/mit">
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
- </a>
- <img src="https://img.shields.io/github/actions/workflow/status/magicmirrororg/magicmirror/automated-tests.yaml" alt="GitHub Actions">
- <img src="https://img.shields.io/github/check-runs/magicmirrororg/magicmirror/master" alt="Build Status">
- <a href="https://github.com/MagicMirrorOrg/MagicMirror">
-  <img src="https://img.shields.io/github/stars/magicmirrororg/magicmirror?style=social" alt="GitHub Stars">
- </a>
-</p>
+Configuración personal de [MagicMirror²](https://magicmirror.builders/) con sistema multipágina, cotizaciones en tiempo real, Spotify, galería de imágenes y control remoto vía API REST.
 
-**MagicMirror²** is an open source modular smart mirror platform. With a growing list of installable modules, the **MagicMirror²** allows you to convert your hallway or bathroom mirror into your personal assistant. **MagicMirror²** is built by the creator of [the original MagicMirror](https://michaelteeuw.nl/tagged/magicmirror) with the incredible help of a [growing community of contributors](https://github.com/MagicMirrorOrg/MagicMirror/graphs/contributors).
+---
 
-MagicMirror² focuses on a modular plugin system and uses [Electron](https://www.electronjs.org/) as an application wrapper. So no more web server or browser installs necessary!
+## Estructura de páginas
 
-![Animated demonstration of MagicMirror²](https://magicmirror.builders/img/demo.gif)
+| Página | Módulos | Descripción |
+|--------|---------|-------------|
+| **1 — Inicio** | `clock` · `compliments` · `weather` | Reloj, meteorología, frases |
+| **2 — Finanzas** | `MMM-Jast` · `MMM-Spotify` | Cotizaciones (Yahoo Finance) + reproductor Spotify |
+| **3 — Galería** | `MMM-SmartWebDisplay` | Carrusel de imágenes local |
 
-## Documentation
+**Módulos fijos** (visibles en todas las páginas): `alert` · `MMM-Remote-Control` · `MMM-Page-Indicator` · `newsfeed`
 
-For the full documentation including **[installation instructions](https://docs.magicmirror.builders/getting-started/installation.html)**, please visit our dedicated documentation website: [https://docs.magicmirror.builders](https://docs.magicmirror.builders).
+---
 
-## Links
+## Requisitos
 
-- Website: [https://magicmirror.builders](https://magicmirror.builders)
-- Documentation: [https://docs.magicmirror.builders](https://docs.magicmirror.builders)
-- Forum: [https://forum.magicmirror.builders](https://forum.magicmirror.builders)
-  - Technical discussions: <https://forum.magicmirror.builders/category/11/core-system>
-- Discord: [https://discord.gg/J5BAtvx](https://discord.gg/J5BAtvx)
-- Blog: [https://michaelteeuw.nl/tagged/magicmirror](https://michaelteeuw.nl/tagged/magicmirror)
-- Donations: [https://magicmirror.builders/#donate](https://magicmirror.builders/#donate)
+- Node.js >= 20
+- npm >= 10
+- Cuenta de [OpenWeatherMap](https://openweathermap.org/api) (plan gratuito válido)
+- Cuenta de [Spotify Developer](https://developer.spotify.com/dashboard) (para MMM-Spotify)
 
-## Contributing Guidelines
+---
 
-Contributions of all kinds are welcome, not only in the form of code but also with regards to
+## Instalación
 
-- bug reports
-- documentation
-- translations
+### 1. Clonar el repositorio
 
-For the full contribution guidelines, check out: [https://docs.magicmirror.builders/about/contributing.html](https://docs.magicmirror.builders/about/contributing.html)
+```bash
+git clone https://github.com/trripe1/MagicMirror
+cd MagicMirror
+npm install
+```
 
-## Enjoying MagicMirror? Consider a donation!
+### 2. Instalar los módulos custom
 
-MagicMirror² is Open Source and free. That doesn't mean we don't need any money.
+```bash
+cd modules
 
-Please consider a donation to help us cover the ongoing costs like webservers and email services.
-If we receive enough donations we might even be able to free up some working hours and spend some extra time improving the MagicMirror² core.
+# Sistema multipágina
+git clone https://github.com/edward-shen/MMM-pages.git
+cd MMM-pages && npm install && cd ..
 
-To donate, please follow [this](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G5D8E9MR5DTD2&source=url) link.
+# Indicador de página
+git clone https://github.com/edward-shen/MMM-page-indicator.git MMM-Page-Indicator
+cd MMM-Page-Indicator && npm install && cd ..
 
-<p style="text-align: center">
-  <a href="https://forum.magicmirror.builders/topic/728/magicmirror-is-voted-number-1-in-the-magpi-top-50"><img src="https://magicmirror.builders/img/magpi-best-watermark-custom.png" width="150" alt="MagPi Top 50"></a>
-</p>
+# Panel de control remoto
+git clone https://github.com/Jopyth/MMM-Remote-Control.git
+cd MMM-Remote-Control && npm install && cd ..
+
+# Cotizaciones (sin API key, usa Yahoo Finance)
+git clone https://github.com/jalibu/MMM-Jast.git
+cd MMM-Jast && npm install && cd ..
+
+# Reproductor Spotify
+git clone https://github.com/skuethe/MMM-Spotify.git
+cd MMM-Spotify && npm install && cd ..
+
+# Visor de imágenes / URLs
+git clone https://github.com/AgP42/MMM-SmartWebDisplay.git
+cd MMM-SmartWebDisplay && npm install && cd ..
+
+cd ..
+```
+
+### 3. Configurar
+
+```bash
+cp config/config.js.sample config/config.js
+```
+
+Edita `config/config.js` y reemplaza `YOUR_OPENWEATHERMAP_API_KEY` con tu clave de [OpenWeatherMap](https://openweathermap.org/api).
+
+### 4. Galería de imágenes
+
+Copia tus imágenes en `modules/MMM-SmartWebDisplay/imagenes_a_mostrar/` con los nombres `img1.jpg` … `img7.jpg` (el carrusel cambia cada minuto).
+
+---
+
+## Configuración de Spotify
+
+Crea una app en [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) con la **Redirect URI**: `http://TU_IP_LOCAL:8888/callback`
+
+Crea el archivo `modules/MMM-Spotify/spotify.config.json` (usa `spotify.config.json.example-single` como referencia):
+
+```json
+[
+  {
+    "USERNAME": "tu_usuario_spotify",
+    "CLIENT_ID": "tu_client_id",
+    "CLIENT_SECRET": "tu_client_secret",
+    "TOKEN": "./USERNAME_token.json",
+    "REDIRECT_URI": "http://TU_IP_LOCAL:8888/callback"
+  }
+]
+```
+
+Autentica (solo la primera vez):
+
+```bash
+node modules/MMM-Spotify/auth_windows.js
+```
+
+---
+
+## Arranque
+
+```bash
+npm start
+```
+
+Accesible en `http://localhost:8080`
+
+---
+
+## Control remoto
+
+| Recurso | URL |
+|---------|-----|
+| Panel de control | `http://localhost:8080/remote.html` |
+| Panel de páginas | `http://localhost:8080/modules/MMM-Remote-Control/PAGINAS.html` |
+| Cambiar página (API) | `POST /api/notification/PAGE_CHANGED` · body: `{"payload": 0\|1\|2}` |
+| Página siguiente | `POST /api/notification/PAGE_INCREMENT` |
+| Página anterior | `POST /api/notification/PAGE_DECREMENT` |
+
+---
+
+## Módulos adicionales instalados (no activos en config)
+
+Están instalados pero no incluidos en `config.js`. Se pueden activar añadiéndolos al array `modules`:
+
+| Módulo | Repo |
+|--------|------|
+| MMM-Carousel | https://github.com/shbatm/MMM-Carousel |
+| MMM-OpenWeatherForecast | https://github.com/jclarke0000/MMM-OpenWeatherForecast |
+| MMM-CardDavBirthdaysProvider | https://github.com/ulrichwisser/MMM-CardDavBirthdaysProvider |
+
+---
+
+## Licencia
+
+Configuración personal sobre [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror), distribuido bajo licencia MIT.

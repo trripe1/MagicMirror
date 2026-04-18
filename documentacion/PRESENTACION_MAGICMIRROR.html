@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MagicMirror² — Presentación del Proyecto</title>
+<style>
+/* ── Reset global ── */
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ── Fondo oscuro tipo espejo, fuente limpia ── */
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:#0a0f1e;
+  color:#e2e8f0;
+  line-height:1.7;
+  font-size:15px;
+}
+
+/* ── Contenedor centrado ── */
+.wrap{max-width:1000px;margin:0 auto;padding:60px 32px 80px}
+@media(max-width:700px){.wrap{padding:32px 16px 60px}}
+
+/* ── HERO — portada principal ── */
+.hero{
+  text-align:center;
+  padding:80px 20px 70px;
+  border-bottom:1px solid #1e293b;
+  margin-bottom:70px;
+  position:relative;
+}
+/* Línea de acento azul arriba */
+.hero::before{
+  content:'';
+  display:block;
+  width:80px;height:4px;
+  background:linear-gradient(90deg,#2563eb,#38bdf8);
+  border-radius:2px;
+  margin:0 auto 40px;
+}
+.hero .pill{
+  display:inline-block;
+  background:rgba(37,99,235,0.15);
+  border:1px solid #2563eb;
+  color:#60a5fa;
+  font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;
+  margin-bottom:28px;
+}
+.hero h1{
+  font-size:48px;font-weight:900;
+  background:linear-gradient(135deg,#e2e8f0 40%,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:14px;
+  line-height:1.15;
+}
+.hero .tagline{
+  font-size:19px;color:#94a3b8;
+  margin-bottom:32px;
+  max-width:620px;margin-left:auto;margin-right:auto;
+}
+/* Chips de tecnologías usadas */
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px}
+.chip{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#94a3b8;
+  font-size:12px;font-weight:600;
+  padding:5px 12px;border-radius:6px;
+  letter-spacing:.5px;
+}
+
+/* ── Títulos de sección ── */
+h2{
+  font-size:24px;font-weight:800;
+  color:#f1f5f9;
+  margin:70px 0 20px;
+  padding-bottom:12px;
+  border-bottom:1px solid #1e293b;
+  display:flex;align-items:center;gap:14px;
+}
+/* Círculo numerado para cada sección */
+h2 .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:36px;height:36px;
+  background:linear-gradient(135deg,#1d4ed8,#2563eb);
+  color:#fff;border-radius:50%;
+  font-size:14px;font-weight:800;flex-shrink:0;
+}
+h3{font-size:17px;font-weight:700;color:#7dd3fc;margin:28px 0 10px}
+h4{font-size:14px;font-weight:700;color:#94a3b8;margin:22px 0 8px;text-transform:uppercase;letter-spacing:.8px}
+p{margin-bottom:14px;color:#cbd5e1}
+
+/* ── Tarjetas ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin:24px 0}
+.card{
+  background:#111827;
+  border:1px solid #1e293b;
+  border-radius:14px;
+  padding:22px 24px;
+  transition:border-color .2s,transform .2s;
+}
+.card:hover{border-color:#2563eb;transform:translateY(-2px)}
+.card .icon{font-size:28px;margin-bottom:12px}
+.card h4{font-size:15px;font-weight:800;color:#f1f5f9;margin-bottom:8px}
+.card p{font-size:13px;color:#94a3b8;margin:0}
+
+/* ── Bloques de destacado ── */
+.highlight{
+  background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(56,189,248,.08));
+  border:1px solid rgba(37,99,235,.3);
+  border-radius:12px;
+  padding:22px 26px;
+  margin:20px 0;
+}
+.highlight strong{color:#60a5fa}
+
+/* ── Cajas de problema→solución ── */
+.problem{
+  background:#1a0f0f;
+  border-left:4px solid #dc2626;
+  border-radius:0 10px 10px 0;
+  padding:14px 20px;
+  margin:0 0 4px;
+  font-size:14px;
+  color:#fca5a5;
+}
+.solution{
+  background:#0d1f0d;
+  border-left:4px solid #16a34a;
+  border-radius:0 10px 10px 0;
+  padding:14px 20px;
+  margin:0 0 20px;
+  font-size:14px;
+  color:#86efac;
+}
+.problem strong,.solution strong{
+  display:block;font-size:11px;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:5px;opacity:.8;
+}
+
+/* ── Tabla de módulos ── */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}
+th{
+  background:#1e293b;color:#94a3b8;
+  padding:10px 14px;text-align:left;
+  font-weight:600;font-size:12px;
+  letter-spacing:.5px;text-transform:uppercase;
+}
+td{padding:11px 14px;border-bottom:1px solid #1e293b;color:#cbd5e1;vertical-align:top}
+tr:hover td{background:rgba(37,99,235,.05)}
+
+/* ── Diagrama de flujo (arquitectura) ── */
+.arch{
+  background:#0d1117;
+  border:1px solid #1e293b;
+  border-radius:14px;
+  padding:30px;
+  margin:24px 0;
+  font-family:'Consolas',monospace;
+  font-size:13px;
+  line-height:2.2;
+  color:#64748b;
+}
+.arch .layer{color:#e2e8f0;font-weight:700}
+.arch .arrow{color:#2563eb}
+.arch .box-a{color:#7dd3fc}
+.arch .box-b{color:#86efac}
+.arch .box-c{color:#f472b6}
+.arch .box-d{color:#fb923c}
+
+/* ── Línea de tiempo (por qué de las decisiones) ── */
+.timeline{list-style:none;padding:0;margin:24px 0;position:relative}
+.timeline::before{
+  content:'';position:absolute;left:17px;top:0;bottom:0;
+  width:2px;background:#1e293b;
+}
+.timeline li{
+  padding:0 0 28px 50px;
+  position:relative;
+}
+.timeline li::before{
+  content:'';
+  position:absolute;left:8px;top:5px;
+  width:18px;height:18px;
+  background:#1d4ed8;border-radius:50%;
+  border:3px solid #0a0f1e;
+  box-shadow:0 0 0 2px #2563eb;
+}
+.timeline li .head{
+  font-weight:700;color:#f1f5f9;font-size:15px;
+  margin-bottom:6px;
+}
+.timeline li .body{font-size:13px;color:#94a3b8}
+
+/* ── Pastilla URL ── */
+.url-block{
+  background:#0d1117;
+  border:1px solid #1e293b;
+  border-radius:8px;
+  padding:12px 18px;
+  margin:8px 0;
+  display:flex;align-items:center;gap:12px;
+}
+.url-block .lbl{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;
+  color:#475569;text-transform:uppercase;white-space:nowrap;
+}
+.url-block .val{color:#38bdf8;font-family:monospace;font-size:13px;word-break:break-all}
+
+/* ── Separador ── */
+hr{border:none;border-top:1px solid #1e293b;margin:60px 0}
+
+/* ── Conclusión / cierre ── */
+.closing{
+  text-align:center;
+  padding:60px 20px 20px;
+  border-top:1px solid #1e293b;
+  margin-top:60px;
+}
+.closing h3{font-size:22px;font-weight:800;color:#f1f5f9;margin-bottom:12px}
+.closing p{color:#64748b;font-size:14px}
+
+/* ── Footer ── */
+footer{
+  text-align:center;
+  color:#334155;
+  font-size:12px;
+  margin-top:40px;
+  line-height:2;
+}
+
+/* ── Código inline ── */
+code{
+  font-family:'Consolas','Courier New',monospace;
+  font-size:13px;
+  background:#1e293b;
+  color:#7dd3fc;
+  padding:2px 7px;
+  border-radius:4px;
+  border:1px solid #334155;
+}
+
+/* ── Badge de estado ── */
+.badge{
+  display:inline-block;
+  padding:3px 10px;border-radius:4px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+}
+.badge.ok{background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(22,163,74,.3)}
+.badge.warn{background:rgba(202,138,4,.15);color:#fbbf24;border:1px solid rgba(202,138,4,.3)}
+.badge.info{background:rgba(37,99,235,.15);color:#60a5fa;border:1px solid rgba(37,99,235,.3)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════
+     HERO — Portada de la presentación
+═══════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="pill">Proyecto de Grado Superior · 2026</div>
+  <h1>MagicMirror²</h1>
+  <div class="tagline">Un espejo inteligente que combina información útil, automatización y acceso remoto sobre una pantalla retroiluminada.</div>
+  <!-- Chips de tecnologías clave del proyecto -->
+  <div class="chips">
+    <span class="chip">Node.js</span>
+    <span class="chip">Electron</span>
+    <span class="chip">Express</span>
+    <span class="chip">Socket.io</span>
+    <span class="chip">API REST</span>
+    <span class="chip">OAuth 2.0</span>
+    <span class="chip">RSS</span>
+    <span class="chip">OpenWeatherMap</span>
+    <span class="chip">Spotify API</span>
+    <span class="chip">Yahoo Finance</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     1 — ¿QUÉ ES Y POR QUÉ?
+═══════════════════════════════════════════════ -->
+<h2><span class="num">1</span>¿Qué es MagicMirror² y por qué lo elegimos?</h2>
+
+<p>MagicMirror² es un <strong>framework de código abierto</strong> (licencia MIT) que convierte cualquier pantalla en un espejo inteligente. Funciona como una aplicación <strong>Node.js + Electron</strong>: Node.js gestiona el servidor web y la lógica de negocio, mientras Electron renderiza la interfaz en Chromium a pantalla completa.</p>
+
+<div class="highlight">
+  <strong>¿Por qué MagicMirror² y no una solución personalizada?</strong>
+  <p style="margin-top:8px;margin-bottom:0">Porque ya resuelve los problemas difíciles: comunicación en tiempo real entre módulos (Socket.io), carga dinámica de módulos, acceso remoto por red y un ecosistema de más de 1.500 módulos de la comunidad. Construir todo eso desde cero habría sido inviable en el tiempo disponible.</p>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <div class="icon">🖥️</div>
+    <h4>Pantalla retroiluminada</h4>
+    <p>Un monitor detrás de un espejo semitransparente. El fondo negro del espejo no refleja nada; los elementos blancos/luminosos sí son visibles.</p>
+  </div>
+  <div class="card">
+    <div class="icon">🌐</div>
+    <h4>Servidor web integrado</h4>
+    <p>Express sirve la interfaz en el puerto 8080. Cualquier dispositivo de la red local puede acceder a la API o al panel de control.</p>
+  </div>
+  <div class="card">
+    <div class="icon">🧩</div>
+    <h4>Arquitectura modular</h4>
+    <p>Cada widget es un módulo independiente. Se pueden añadir, quitar o configurar sin modificar el núcleo de la aplicación.</p>
+  </div>
+  <div class="card">
+    <div class="icon">⚡</div>
+    <h4>Tiempo real</h4>
+    <p>Socket.io mantiene conexión bidireccional entre el servidor (Node.js) y el navegador (Electron). Los cambios se reflejan al instante sin recargar la página.</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     2 — ARQUITECTURA TÉCNICA
+═══════════════════════════════════════════════ -->
+<h2><span class="num">2</span>Arquitectura técnica del sistema</h2>
+
+<p>El sistema tiene tres capas bien diferenciadas que se comunican entre sí:</p>
+
+<div class="arch">
+<span class="layer">CAPA 1 — DATOS (fuentes externas)</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">OpenWeatherMap API</span>  <span class="arrow">──</span>  tiempo actual + previsión 5 días (REST/JSON)
+<br>
+&nbsp;&nbsp;<span class="box-a">Spotify API</span>          <span class="arrow">──</span>  reproducción en curso (OAuth 2.0 + polling)
+<br>
+&nbsp;&nbsp;<span class="box-a">Yahoo Finance</span>        <span class="arrow">──</span>  cotizaciones BTC, DOGE, Petróleo (scraping interno)
+<br>
+&nbsp;&nbsp;<span class="box-a">RSS Feeds</span>            <span class="arrow">──</span>  El País · La Vanguardia · RTVE (XML/RSS)
+<br><br>
+<span class="layer">CAPA 2 — SERVIDOR (Node.js · puerto 8080)</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">node_helper.js</span> de cada módulo  <span class="arrow">→</span>  hace las peticiones HTTP a las APIs externas
+<br>
+&nbsp;&nbsp;<span class="box-b">Express</span>                          <span class="arrow">→</span>  sirve archivos estáticos (HTML, CSS, JS, imágenes)
+<br>
+&nbsp;&nbsp;<span class="box-b">Socket.io server</span>                 <span class="arrow">→</span>  envía los datos al navegador en tiempo real
+<br>
+&nbsp;&nbsp;<span class="box-b">API REST (MMM-Remote-Control)</span>    <span class="arrow">→</span>  recibe comandos del exterior (cambio de página, etc.)
+<br><br>
+<span class="layer">CAPA 3 — INTERFAZ (Electron / Chromium)</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">Socket.io client</span>   <span class="arrow">→</span>  recibe datos del servidor y los pinta en DOM
+<br>
+&nbsp;&nbsp;<span class="box-c">MMM-pages</span>          <span class="arrow">→</span>  gestiona visibilidad CSS de módulos por página
+<br>
+&nbsp;&nbsp;<span class="box-c">Módulos JS</span>         <span class="arrow">→</span>  generan el HTML de cada widget (reloj, clima, etc.)
+<br><br>
+<span class="layer">CONTROL REMOTO (cualquier dispositivo de la red)</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">PAGINAS.html</span>       <span class="arrow">→</span>  fetch() → POST /api/notification/PAGE_CHANGED
+<br>
+&nbsp;&nbsp;<span class="box-d">curl / script</span>      <span class="arrow">→</span>  POST /api/notification/... (automatización)
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     3 — POR QUÉ CADA MÓDULO
+═══════════════════════════════════════════════ -->
+<h2><span class="num">3</span>¿Por qué cada módulo?</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Módulo</th>
+      <th>Función</th>
+      <th>Por qué se eligió</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clock</strong></td>
+      <td>Reloj digital con fecha</td>
+      <td>Módulo nativo de MagicMirror². Sin dependencias extra. Soporta zonas horarias.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>weather</strong></td>
+      <td>Tiempo actual y previsión</td>
+      <td>Módulo nativo. Sustituye a MMM-OpenWeatherForecast por compatibilidad con la API gratuita (data/2.5) sin tarjeta de crédito.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>compliments</strong></td>
+      <td>Frases motivacionales</td>
+      <td>Módulo nativo. Rota mensajes según la hora del día. Personalizable sin código.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>newsfeed</strong></td>
+      <td>Titulares de noticias</td>
+      <td>Módulo nativo. Lee RSS estándar de cualquier medio. Sin API key. Tres fuentes en español.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>MMM-Jast</strong></td>
+      <td>Cotizaciones en tiempo real</td>
+      <td>Usa Yahoo Finance directamente. No requiere API key ni registro. Soporta criptomonedas y materias primas.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>MMM-Spotify</strong></td>
+      <td>Reproductor de Spotify</td>
+      <td>Muestra portada, artista, progreso y controles. Se integra con la cuenta existente sin hardware adicional.</td>
+      <td><span class="badge warn">requiere auth</span></td>
+    </tr>
+    <tr>
+      <td><strong>MMM-SmartWebDisplay</strong></td>
+      <td>Galería de imágenes</td>
+      <td>Incrusta contenido vía iframe. Se resolvió el problema de X-Frame-Options con img.html propio.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>MMM-pages</strong></td>
+      <td>Sistema multipágina</td>
+      <td>Permite organizar módulos en páginas independientes. Sin él, todos los módulos aparecen a la vez.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>MMM-Remote-Control</strong></td>
+      <td>API REST + panel web</td>
+      <td>Expone una API completa para controlar el espejo desde cualquier dispositivo. Esencial para la integración con PAGINAS.html.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>MMM-Page-Indicator</strong></td>
+      <td>Puntos de navegación</td>
+      <td>Feedback visual de la página activa. Los puntos son clicables en pantalla táctil.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+    <tr>
+      <td><strong>alert</strong></td>
+      <td>Notificaciones emergentes</td>
+      <td>Módulo nativo. Muestra alertas en pantalla completa cuando lo solicita otro módulo. Necesario para el sistema de notificaciones de MagicMirror.</td>
+      <td><span class="badge ok">activo</span></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- ═══════════════════════════════════════════════
+     4 — PROBLEMAS REALES Y SOLUCIONES
+═══════════════════════════════════════════════ -->
+<h2><span class="num">4</span>Problemas reales encontrados y cómo se resolvieron</h2>
+
+<p>Estos no son problemas teóricos: ocurrieron durante el desarrollo y requirieron investigación y decisiones técnicas concretas.</p>
+
+<!-- Problema 1 -->
+<div class="problem"><strong>Problema 1</strong>MMM-SmartWebDisplay no mostraba las imágenes. El iframe cargaba en blanco.</div>
+<div class="solution">
+  <strong>Solución</strong>
+  Los CDNs externos usan la cabecera HTTP <code>X-Frame-Options: DENY</code> para impedir ser incrustados en iframes por seguridad. Se creó <strong>img.html</strong>, un archivo HTML mínimo servido por el propio MagicMirror en localhost que carga la imagen con una etiqueta <code>&lt;img&gt;</code> en lugar de un iframe. Al estar en el mismo origen (localhost:8080), no hay restricciones de seguridad.
+</div>
+
+<!-- Problema 2 -->
+<div class="problem"><strong>Problema 2</strong>El parámetro de configuración del módulo se llamaba <code>urls</code> (plural) pero el módulo no funcionaba.</div>
+<div class="solution">
+  <strong>Solución</strong>
+  Leyendo el código fuente de MMM-SmartWebDisplay se descubrió que el módulo internamente lee <code>this.config.url</code> (singular). La documentación estaba desactualizada. Además, los elementos del array debían ser strings planos, no objetos <code>{ url: "...", label: "..." }</code>. Se corrigió en config.js y funciona.
+</div>
+
+<!-- Problema 3 -->
+<div class="problem"><strong>Problema 3</strong>MMM-OpenWeatherForecast se quedaba en "Cargando..." sin mostrar datos.</div>
+<div class="solution">
+  <strong>Solución</strong>
+  Desde 2022, OpenWeather requiere registrar una tarjeta de crédito para activar su API One Call 3.0, incluso en el plan gratuito. Se decidió sustituir el módulo por el módulo nativo <code>weather</code> de MagicMirror², que usa los endpoints <code>data/2.5/weather</code> y <code>data/2.5/forecast</code>, que son completamente gratuitos y no requieren tarjeta. La funcionalidad es equivalente.
+</div>
+
+<!-- Problema 4 -->
+<div class="problem"><strong>Problema 4</strong>PAGINAS.html abría desde VS Code Live Server (puerto 5500) pero no podía controlar el espejo.</div>
+<div class="solution">
+  <strong>Solución</strong>
+  Entender que son dos servidores distintos: Live Server sirve archivos estáticos desde el disco en :5500; MagicMirror tiene su propio servidor Express en :8080. PAGINAS.html funciona desde cualquier servidor porque sus botones hacen peticiones fetch() directamente a <code>http://192.168.18.112:8080/api/...</code>. El HTML puede estar en cualquier sitio siempre que MagicMirror esté corriendo en :8080.
+</div>
+
+<!-- Problema 5 -->
+<div class="problem"><strong>Problema 5</strong>MMM-Spotify aparecía en blanco sin ningún mensaje de error.</div>
+<div class="solution">
+  <strong>Solución</strong>
+  El módulo requiere autenticación OAuth 2.0 con Spotify antes del primer uso. Se creó <code>auth_windows.js</code>, un script que lanza un servidor HTTP local en el puerto 8888, genera la URL de autorización de Spotify, espera el callback con el código de autorización, lo intercambia por un token y lo guarda en un archivo JSON. A partir de ahí el módulo lo usa y lo renueva automáticamente.
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     5 — DECISIONES DE DISEÑO
+═══════════════════════════════════════════════ -->
+<h2><span class="num">5</span>Decisiones de diseño y por qué</h2>
+
+<ul class="timeline">
+  <li>
+    <div class="head">Sistema de 3 páginas en lugar de un dashboard único</div>
+    <div class="body">Con todos los módulos visibles a la vez la pantalla se satura. El sistema de páginas (MMM-pages) permite mostrar información relevante según el momento: inicio del día (reloj + clima), durante el ocio (música + finanzas), o modo galería. La navegación es inmediata y sin recargar.</div>
+  </li>
+  <li>
+    <div class="head">Módulos fijos para información siempre crítica</div>
+    <div class="body">Las noticias, el indicador de página y el control remoto permanecen visibles en todas las páginas. Son los módulos de "infraestructura": control de navegación y contexto informativo continuo independientemente de la página activa.</div>
+  </li>
+  <li>
+    <div class="head">API REST abierta en red local (sin autenticación)</div>
+    <div class="body">Se configuró <code>secureEndpoints: false</code> en MMM-Remote-Control porque el espejo opera en una red local privada. No tiene sentido añadir autenticación que complique el uso desde el móvil o la tablet. En producción pública sería diferente.</div>
+  </li>
+  <li>
+    <div class="head">Carpeta <code>imagenes_a_mostrar/</code> para la galería</div>
+    <div class="body">Separar las imágenes del código del módulo facilita la gestión: añadir, eliminar o sustituir fotos sin tocar ningún archivo de código. Solo hay que copiar o renombrar archivos en esa carpeta y actualizar las URLs en config.js.</div>
+  </li>
+  <li>
+    <div class="head">data/2.5 en lugar de data/3.0 para el tiempo</div>
+    <div class="body">La API 3.0 requiere tarjeta de crédito aunque sea gratuita. La API 2.5 ofrece tiempo actual y previsión de 5 días, que es todo lo que necesita el espejo. La decisión fue pragmática: funcionalidad equivalente, cero fricción para quien instale el proyecto.</div>
+  </li>
+  <li>
+    <div class="head">PM2 para el arranque automático</div>
+    <div class="body">PM2 es un gestor de procesos para Node.js que reinicia la aplicación si falla y la lanza automáticamente al arrancar el sistema. Alternativa más ligera que systemd para este caso de uso. Permite ver logs, reiniciar y parar con un solo comando.</div>
+  </li>
+</ul>
+
+
+<!-- ═══════════════════════════════════════════════
+     6 — FLUJO DE OAUTH SPOTIFY
+═══════════════════════════════════════════════ -->
+<h2><span class="num">6</span>El flujo OAuth 2.0 de Spotify explicado</h2>
+
+<p>OAuth 2.0 es un protocolo de autorización que permite a una aplicación acceder a recursos de un usuario sin que el usuario entregue su contraseña a la aplicación. Es el estándar de la industria.</p>
+
+<div class="arch">
+<span class="layer">AUTHORIZATION CODE FLOW (el que usa este proyecto)</span>
+<br><br>
+<span class="box-a">1.</span> auth_windows.js genera URL → <span class="box-b">accounts.spotify.com/authorize?client_id=...&scope=...&redirect_uri=...</span>
+<br>
+<span class="box-a">2.</span> Usuario abre la URL en el navegador y hace clic en "Acepto"
+<br>
+<span class="box-a">3.</span> Spotify redirige a <span class="box-c">http://127.0.0.1:8888/callback?code=CODIGO_UNICO</span>
+<br>
+<span class="box-a">4.</span> auth_windows.js captura el <span class="box-c">code</span> y hace POST a <span class="box-b">accounts.spotify.com/api/token</span>
+<br>
+<span class="box-a">5.</span> Spotify devuelve <span class="box-d">access_token</span> (válido 1h) + <span class="box-d">refresh_token</span> (para renovar)
+<br>
+<span class="box-a">6.</span> Ambos tokens se guardan en <span class="box-c">MagicMirror_token.json</span>
+<br>
+<span class="box-a">7.</span> MMM-Spotify usa el access_token y lo renueva automáticamente con el refresh_token
+<br><br>
+<span style="color:#475569">→ El usuario solo interviene en los pasos 2 y 3. Todo lo demás es automático.</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     7 — URLS DE ACCESO
+═══════════════════════════════════════════════ -->
+<h2><span class="num">7</span>Puntos de acceso al sistema</h2>
+
+<p>El proyecto expone varios puntos de acceso según el propósito:</p>
+
+<h3>Servidor MagicMirror (puerto 8080)</h3>
+<div class="url-block"><span class="lbl">Espejo</span><span class="val">http://192.168.18.112:8080</span></div>
+<div class="url-block"><span class="lbl">Panel control</span><span class="val">http://192.168.18.112:8080/remote.html</span></div>
+<div class="url-block"><span class="lbl">Cambio de páginas</span><span class="val">http://192.168.18.112:8080/modules/MMM-Remote-Control/PAGINAS.html</span></div>
+<div class="url-block"><span class="lbl">API REST</span><span class="val">http://192.168.18.112:8080/api/</span></div>
+
+<h3>VS Code Live Server (puerto 5500) — solo en desarrollo</h3>
+<div class="url-block"><span class="lbl">Esta presentación</span><span class="val">http://127.0.0.1:5500/home/magicmirror/MagicMirror/PRESENTACION_MAGICMIRROR.html</span></div>
+<div class="url-block"><span class="lbl">Documentación</span><span class="val">http://127.0.0.1:5500/home/magicmirror/MagicMirror/DOCUMENTACION_MAGICMIRROR.html</span></div>
+<div class="url-block"><span class="lbl">Panel páginas (vía Live Server)</span><span class="val">http://127.0.0.1:5500/home/magicmirror/MagicMirror/modules/MMM-Remote-Control/PAGINAS.html</span></div>
+
+<div class="highlight" style="margin-top:20px">
+  <strong>¿Por qué PAGINAS.html funciona desde los dos puertos?</strong>
+  <p style="margin-top:8px;margin-bottom:0">PAGINAS.html es un archivo HTML estático. Lo puede servir cualquier servidor (incluyendo VS Code Live Server). Sus botones ejecutan <code>fetch('http://192.168.18.112:8080/api/...')</code> directamente hacia MagicMirror. El servidor que sirve el HTML no importa — lo que importa es que MagicMirror esté corriendo en el puerto 8080.</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     8 — SECCIÓN TÉCNICA DETALLADA
+═══════════════════════════════════════════════ -->
+<h2><span class="num">8</span>Técnico — Cómo funciona todo, pieza a pieza</h2>
+
+<p>Esta sección explica en profundidad cada componente del sistema: qué hace, cómo está construido internamente, qué funciones tiene y cómo se comunica con el resto. El objetivo es que puedas exponer cualquier parte sin necesidad de buscar nada.</p>
+
+<!-- ──────────────────────────────────────────────
+     8.1 — CONFIG.JS
+─────────────────────────────────────────────── -->
+<h3>8.1 · config.js — el centro de todo</h3>
+
+<p><code>config.js</code> es el único archivo que hay que tocar para configurar el espejo completo. MagicMirror lo lee al arrancar y a partir de él sabe qué módulos cargar, con qué opciones y en qué posición de pantalla.</p>
+
+<div class="arch">
+<span class="layer">Estructura del archivo config.js</span>
+<br><br>
+<span class="box-a">let config = {</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">address: "0.0.0.0"</span>        <span style="color:#475569">← IP de escucha. 0.0.0.0 = acepta conexiones de toda la red local</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">port: 8080</span>                 <span style="color:#475569">← Puerto HTTP del servidor Express de MagicMirror</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">ipWhitelist: []</span>            <span style="color:#475569">← [] = no filtrar IPs, cualquier dispositivo puede acceder</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">language: "es"</span>             <span style="color:#475569">← Idioma de los módulos nativos (fechas, textos)</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">locale: "es-EU"</span>            <span style="color:#475569">← Formato de números y fechas (europeo: 1.234,56)</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">timeFormat: 24</span>             <span style="color:#475569">← Formato de hora. 24 = sin AM/PM</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">units: "metric"</span>            <span style="color:#475569">← Sistema de unidades: metric = °C, km/h</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">logLevel: [...]</span>            <span style="color:#475569">← Qué mensajes aparecen en la consola al ejecutar</span>
+<br><br>
+&nbsp;&nbsp;<span class="box-c">modules: [</span>                 <span style="color:#475569">← Array de objetos. Cada objeto = un módulo activo</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">{</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">module: "nombre-del-modulo"</span>   <span style="color:#475569">← Nombre exacto de la carpeta en modules/</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">position: "top_left"</span>           <span style="color:#475569">← Zona de pantalla donde se renderiza</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">header: "Mi título"</span>            <span style="color:#475569">← Título opcional sobre el módulo</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">config: { ... }</span>               <span style="color:#475569">← Opciones propias del módulo (cada uno tiene las suyas)</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">}</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">]</span>
+<br>
+<span class="box-a">}</span>
+</div>
+
+<div class="highlight">
+  <strong>¿Por qué el nombre del módulo es sensible a mayúsculas?</strong>
+  <p style="margin-top:8px;margin-bottom:0">MagicMirror busca la carpeta del módulo en <code>modules/</code> usando exactamente el nombre escrito en <code>module:</code>. Si escribes <code>"mmm-pages"</code> en lugar de <code>"MMM-pages"</code>, en sistemas Linux/macOS el sistema de archivos distingue mayúsculas y no encontrará la carpeta. En Windows no falla, pero en Raspberry Pi (Linux) sí. Por eso hay que respetar el nombre exacto.</p>
+</div>
+
+<h4>Posiciones disponibles en pantalla</h4>
+<div class="arch">
+<span style="color:#475569">┌─────────────────────────────────────────────────────────────┐</span>
+<br>
+<span style="color:#475569">│</span> <span class="box-b">top_bar</span> (barra superior — ancho completo)                   <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">├───────────────┬──────────────────┬──────────────────────────┤</span>
+<br>
+<span style="color:#475569">│</span> <span class="box-a">top_left</span>       <span style="color:#475569">│</span>  <span class="box-c">top_center</span>      <span style="color:#475569">│</span>              <span class="box-b">top_right</span> <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span> <span class="box-a">upper_third</span>   <span style="color:#475569">│</span>                  <span style="color:#475569">│</span>                          <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">├───────────────┤</span>  <span class="box-c">middle_center</span>   <span style="color:#475569">├──────────────────────────┤</span>
+<br>
+<span style="color:#475569">│</span> <span class="box-a">lower_third</span>   <span style="color:#475569">│</span>                  <span style="color:#475569">│</span>                          <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">├───────────────┼──────────────────┼──────────────────────────┤</span>
+<br>
+<span style="color:#475569">│</span> <span class="box-d">bottom_left</span>   <span style="color:#475569">│</span>  <span class="box-d">bottom_center</span>  <span style="color:#475569">│</span>          <span class="box-d">bottom_right</span>     <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">├─────────────────────────────────────────────────────────────┤</span>
+<br>
+<span style="color:#475569">│</span> <span class="box-b">bottom_bar</span> (barra inferior — ancho completo)                <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">└─────────────────────────────────────────────────────────────┘</span>
+</div>
+
+<!-- ──────────────────────────────────────────────
+     8.2 — ANATOMÍA DE UN MÓDULO
+─────────────────────────────────────────────── -->
+<h3>8.2 · Anatomía de un módulo — qué archivos tiene y para qué sirve cada uno</h3>
+
+<p>Cada módulo es una carpeta dentro de <code>modules/</code>. Su estructura mínima tiene dos archivos clave:</p>
+
+<div class="arch">
+<span class="layer">modules/NombreModulo/</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">NombreModulo.js</span>      <span style="color:#475569">← Código del FRONTEND. Se ejecuta en el navegador (Electron/Chromium)</span>
+<br>
+&nbsp;&nbsp;<span class="box-b">node_helper.js</span>       <span style="color:#475569">← Código del BACKEND. Se ejecuta en Node.js (servidor)</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">NombreModulo.css</span>     <span style="color:#475569">← Estilos visuales del módulo (opcional)</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">package.json</span>         <span style="color:#475569">← Dependencias npm del módulo (axios, moment, etc.)</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">node_modules/</span>        <span style="color:#475569">← Dependencias instaladas con npm install (no tocar)</span>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <div class="icon">🖥️</div>
+    <h4>NombreModulo.js (frontend)</h4>
+    <p>Se ejecuta dentro de Chromium/Electron. Su función principal es <strong>construir el HTML</strong> que aparece en pantalla y <strong>recibir datos del backend</strong> via Socket.io.</p>
+  </div>
+  <div class="card">
+    <div class="icon">⚙️</div>
+    <h4>node_helper.js (backend)</h4>
+    <p>Se ejecuta en Node.js. Su función es <strong>hacer peticiones HTTP</strong> a APIs externas (clima, Spotify, etc.) y <strong>enviar los datos al frontend</strong> via Socket.io.</p>
+  </div>
+</div>
+
+<h4>Funciones del archivo de módulo (frontend — NombreModulo.js)</h4>
+<table>
+  <thead><tr><th>Función</th><th>Cuándo se llama</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>start()</code></td>
+      <td>Al arrancar MagicMirror, una vez</td>
+      <td>Inicialización del módulo. Aquí se inicializan variables internas y se envía la primera petición de datos al node_helper.</td>
+    </tr>
+    <tr>
+      <td><code>getDom()</code></td>
+      <td>Cada vez que hay que re-renderizar el módulo</td>
+      <td>Devuelve un elemento HTML (div, table, etc.) que MagicMirror pintará en la posición configurada. Es la función más importante del frontend.</td>
+    </tr>
+    <tr>
+      <td><code>getStyles()</code></td>
+      <td>Al cargar el módulo</td>
+      <td>Devuelve un array con rutas de archivos CSS a cargar para este módulo.</td>
+    </tr>
+    <tr>
+      <td><code>getHeader()</code></td>
+      <td>Al renderizar</td>
+      <td>Devuelve el texto del título del módulo (lo que aparece encima del widget).</td>
+    </tr>
+    <tr>
+      <td><code>socketNotificationReceived(notification, payload)</code></td>
+      <td>Cuando el node_helper envía datos</td>
+      <td>Recibe el nombre de la notificación y los datos. Aquí el módulo guarda los datos y llama a <code>this.updateDom()</code> para redibujar.</td>
+    </tr>
+    <tr>
+      <td><code>notificationReceived(notification, payload, sender)</code></td>
+      <td>Cuando otro módulo envía un evento</td>
+      <td>Permite que módulos se comuniquen entre sí. MMM-pages lo usa para mostrar/ocultar módulos cuando cambia la página.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Funciones del node_helper.js (backend)</h4>
+<table>
+  <thead><tr><th>Función</th><th>Cuándo se llama</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>start()</code></td>
+      <td>Al arrancar el servidor de MagicMirror</td>
+      <td>Inicialización del helper. Normalmente solo imprime un log de confirmación.</td>
+    </tr>
+    <tr>
+      <td><code>socketNotificationReceived(notification, payload)</code></td>
+      <td>Cuando el frontend envía una petición</td>
+      <td>El módulo frontend llama a <code>this.sendSocketNotification("PEDIR_DATOS", {...})</code> y aquí en el backend se recibe ese mensaje. El helper hace la petición HTTP a la API externa y devuelve los datos.</td>
+    </tr>
+    <tr>
+      <td><code>sendSocketNotification(notification, payload)</code></td>
+      <td>Después de obtener datos de una API</td>
+      <td>Envía los datos de vuelta al módulo frontend. El frontend recibe esto en su propio <code>socketNotificationReceived</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="highlight">
+  <strong>El ciclo completo de datos en un módulo (ejemplo: módulo weather)</strong>
+  <div class="arch" style="margin-top:12px;background:#0a0f1e">
+<span class="box-a">1.</span> weather.js llama <code>this.sendSocketNotification("WEATHER_GET", { apiKey, lat, lon })</code>
+<br>
+<span class="box-a">2.</span> node_helper.js recibe "WEATHER_GET" → hace <code>axios.get("api.openweathermap.org/...")</code>
+<br>
+<span class="box-a">3.</span> La API de OpenWeather responde con un JSON con temperatura, viento, etc.
+<br>
+<span class="box-a">4.</span> node_helper.js llama <code>this.sendSocketNotification("WEATHER_DATA", responseJSON)</code>
+<br>
+<span class="box-a">5.</span> weather.js recibe "WEATHER_DATA" → guarda los datos → llama <code>this.updateDom()</code>
+<br>
+<span class="box-a">6.</span> MagicMirror llama a <code>getDom()</code> → el módulo construye el HTML con los datos nuevos
+<br>
+<span class="box-a">7.</span> MagicMirror reemplaza el contenido en pantalla con el nuevo HTML
+  </div>
+</div>
+
+<!-- ──────────────────────────────────────────────
+     8.3 — SOCKET.IO: COMUNICACIÓN EN TIEMPO REAL
+─────────────────────────────────────────────── -->
+<h3>8.3 · Socket.io — por qué la pantalla se actualiza sola</h3>
+
+<p>Socket.io es una librería que crea un canal de comunicación <strong>bidireccional y persistente</strong> entre el servidor (Node.js) y el cliente (Chromium/Electron). A diferencia de HTTP normal donde el cliente siempre pregunta y el servidor responde, con Socket.io <strong>el servidor puede enviar datos al cliente cuando quiera</strong>, sin que el cliente lo pida.</p>
+
+<div class="arch">
+<span class="layer">HTTP normal (sin tiempo real)</span>
+<br>
+<span class="box-a">Cliente</span>  <span class="box-c">──── GET /datos ────→</span>  <span class="box-b">Servidor</span>
+<br>
+<span class="box-a">Cliente</span>  <span class="box-c">←── respuesta ──────</span>  <span class="box-b">Servidor</span>
+<br>
+<span style="color:#475569">  (el cliente tiene que preguntar cada vez; el servidor no puede iniciar)</span>
+<br><br>
+<span class="layer">Socket.io (tiempo real)</span>
+<br>
+<span class="box-a">Cliente</span>  <span class="box-c">══════ WebSocket ══════</span>  <span class="box-b">Servidor</span>
+<br>
+<span class="box-a">Cliente</span>  <span class="box-c">──── emit("pedir") ──→</span>   <span class="box-b">Servidor</span>
+<br>
+<span class="box-a">Cliente</span>  <span class="box-c">←── emit("datos") ───</span>    <span class="box-b">Servidor</span>  <span style="color:#475569">← el servidor envía cuando tiene datos nuevos</span>
+<br>
+<span class="box-a">Cliente</span>  <span class="box-c">←── emit("datos") ───</span>    <span class="box-b">Servidor</span>  <span style="color:#475569">← y otra vez... sin que el cliente pregunte</span>
+</div>
+
+<p>En MagicMirror, cada módulo se comunica con su node_helper a través de Socket.io usando <strong>notificaciones con nombre</strong>. Por ejemplo, el módulo del tiempo envía <code>"WEATHER_GET"</code> y su helper responde con <code>"WEATHER_DATA"</code>. Los nombres son strings arbitrarios — son una convención del propio módulo.</p>
+
+<!-- ──────────────────────────────────────────────
+     8.4 — SISTEMA DE PÁGINAS (MMM-pages)
+─────────────────────────────────────────────── -->
+<h3>8.4 · MMM-pages — cómo funciona la navegación entre páginas</h3>
+
+<p>MMM-pages no mueve módulos ni recarga la página. Su truco es más simple: <strong>cambia el CSS de visibilidad</strong> (<code>display: none</code> / <code>display: block</code>) de cada módulo según la página activa. Todos los módulos están siempre cargados en memoria — solo se ocultan o muestran visualmente.</p>
+
+<div class="arch">
+<span class="layer">config.js — cómo se definen las páginas en MMM-pages</span>
+<br><br>
+<span class="box-b">modules: [</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">["clock", "compliments", "weather"]</span>  <span style="color:#475569">← Página 1 (índice 0): estos módulos son visibles</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">["MMM-Jast", "MMM-Spotify"]</span>          <span style="color:#475569">← Página 2 (índice 1)</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">["MMM-SmartWebDisplay"]</span>              <span style="color:#475569">← Página 3 (índice 2)</span>
+<br>
+<span class="box-b">],</span>
+<br><br>
+<span class="box-c">fixed: ["alert", "MMM-Remote-Control", "MMM-Page-Indicator", "newsfeed"]</span>
+<br>
+<span style="color:#475569">← Estos módulos tienen display:block SIEMPRE, independientemente de la página</span>
+<br><br>
+<span class="box-b">homePage: 0</span>           <span style="color:#475569">← Al arrancar, empieza en la página de índice 0 (Página 1)</span>
+<br>
+<span class="box-b">timings: { default: 0 }</span>  <span style="color:#475569">← 0 = sin rotación automática. Si fuera 30000 = rota cada 30 segundos</span>
+<br>
+<span class="box-b">animationTime: 1000</span>   <span style="color:#475569">← La transición entre páginas dura 1 segundo (fade)</span>
+</div>
+
+<p>Cuando se recibe la notificación <code>PAGE_CHANGED</code> con payload <code>1</code>, MMM-pages oculta todos los módulos de la página actual y muestra los de la página 1 (índice 1 = Finanzas). Los módulos del array <code>fixed</code> nunca se tocan.</p>
+
+<div class="highlight">
+  <strong>⚠ Por qué los nombres en modules[] deben coincidir exactamente</strong>
+  <p style="margin-top:8px;margin-bottom:0">MMM-pages identifica cada módulo por su campo <code>module:</code> en config.js. Si en <code>modules[]</code> escribes <code>"mmm-jast"</code> pero en el módulo está declarado como <code>"MMM-Jast"</code>, MMM-pages no lo encontrará y el módulo será visible en todas las páginas a la vez (como si no estuviera en ninguna).</p>
+</div>
+
+<!-- ──────────────────────────────────────────────
+     8.5 — API REST: MMM-Remote-Control
+─────────────────────────────────────────────── -->
+<h3>8.5 · API REST de MMM-Remote-Control — cómo controlar el espejo desde fuera</h3>
+
+<p>MMM-Remote-Control añade a Express (el servidor de MagicMirror) un conjunto de rutas HTTP adicionales que permiten controlar el espejo desde cualquier dispositivo de la red. Una <strong>API REST</strong> es simplemente un conjunto de URLs a las que se puede llamar con peticiones HTTP estándar.</p>
+
+<table>
+  <thead><tr><th>Método HTTP</th><th>Ruta</th><th>Qué hace</th><th>Ejemplo de body</th></tr></thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/notification/PAGE_CHANGED</code></td><td>Cambia a la página indicada</td><td><code>{"payload": 1}</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/notification/PAGE_INCREMENT</code></td><td>Avanza una página</td><td>—</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/notification/PAGE_DECREMENT</code></td><td>Retrocede una página</td><td>—</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/notification/SPOTIFY_PAUSE</code></td><td>Pausa Spotify</td><td>—</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/module</code></td><td>Lista todos los módulos cargados</td><td>—</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/</code></td><td>Información general de la API</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>Cuando la API recibe un <code>POST /api/notification/PAGE_CHANGED</code>, internamente llama a <code>sendNotification("PAGE_CHANGED", payload)</code> dentro del sistema de MagicMirror, que propaga el evento a todos los módulos — incluyendo MMM-pages, que lo escucha y ejecuta el cambio de página.</p>
+
+<div class="arch">
+<span class="layer">Flujo de un cambio de página desde PAGINAS.html</span>
+<br><br>
+<span class="box-a">1.</span> Usuario pulsa botón "Finanzas" en PAGINAS.html
+<br>
+<span class="box-a">2.</span> JavaScript ejecuta: <span class="box-c">fetch('http://192.168.18.112:8080/api/notification/PAGE_CHANGED', { method:'POST', body:'{"payload":1}' })</span>
+<br>
+<span class="box-a">3.</span> Express recibe la petición → MMM-Remote-Control la procesa
+<br>
+<span class="box-a">4.</span> Se emite internamente: <span class="box-b">sendNotification("PAGE_CHANGED", 1)</span>
+<br>
+<span class="box-a">5.</span> MMM-pages recibe la notificación → oculta módulos página 0 → muestra módulos página 1
+<br>
+<span class="box-a">6.</span> La pantalla del espejo cambia en menos de 1 segundo
+<br>
+<span class="box-a">7.</span> La API responde HTTP 200 → PAGINAS.html muestra el botón como activo
+</div>
+
+<!-- ──────────────────────────────────────────────
+     8.6 — OPENWEATHERMAP API
+─────────────────────────────────────────────── -->
+<h3>8.6 · OpenWeatherMap — cómo funciona la API del tiempo</h3>
+
+<p>OpenWeatherMap ofrece datos meteorológicos a través de una API REST. Se llama enviando una petición GET con parámetros en la URL. La respuesta es un JSON.</p>
+
+<div class="arch">
+<span class="layer">Llamada real que hace el módulo weather</span>
+<br><br>
+<span class="box-b">GET</span> <span class="box-a">https://api.openweathermap.org/data/</span><span class="box-c">2.5</span><span class="box-a">/weather</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">?q=Valencia,ES</span>        <span style="color:#475569">← Ciudad y país</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">&appid=TU_API_KEY</span>     <span style="color:#475569">← Clave de autenticación (identifica quién llama)</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">&units=metric</span>         <span style="color:#475569">← Unidades métricas: temperatura en °C</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">&lang=es</span>              <span style="color:#475569">← Descripción del tiempo en español ("cielo despejado")</span>
+<br><br>
+<span class="layer">Respuesta JSON simplificada</span>
+<br>
+<span class="box-b">{</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">"main": { "temp": 22.4, "humidity": 55, "feels_like": 21.8 }</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">"weather": [{ "description": "cielo despejado", "icon": "01d" }]</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">"wind": { "speed": 3.2, "deg": 180 }</span>
+<br>
+<span class="box-b">}</span>
+</div>
+
+<table>
+  <thead><tr><th>Endpoint</th><th>Datos que devuelve</th><th>Plan necesario</th><th>¿Requiere tarjeta?</th></tr></thead>
+  <tbody>
+    <tr><td><code>data/2.5/weather</code></td><td>Tiempo actual (temperatura, viento, humedad)</td><td>Free</td><td><span class="badge ok">No</span></td></tr>
+    <tr><td><code>data/2.5/forecast</code></td><td>Previsión cada 3h para los próximos 5 días</td><td>Free</td><td><span class="badge ok">No</span></td></tr>
+    <tr><td><code>data/3.0/onecall</code></td><td>Todo en una llamada (actual + horaria + diaria + alertas)</td><td>One Call 3.0</td><td><span class="badge warn">Sí (aunque sea gratis)</span></td></tr>
+  </tbody>
+</table>
+
+<p>El módulo nativo <code>weather</code> de MagicMirror soporta los dos primeros directamente configurando <code>apiVersion: "2.5"</code>. Por eso se usa en lugar de MMM-OpenWeatherForecast (que requería 3.0).</p>
+
+<!-- ──────────────────────────────────────────────
+     8.7 — SPOTIFY OAUTH 2.0 EN DETALLE
+─────────────────────────────────────────────── -->
+<h3>8.7 · Spotify OAuth 2.0 — cada línea de auth_windows.js explicada</h3>
+
+<p>OAuth 2.0 con Authorization Code Flow es el método más seguro para que una app acceda a la cuenta Spotify de un usuario. Nunca se transmite la contraseña del usuario a la app.</p>
+
+<table>
+  <thead><tr><th>Término</th><th>Qué es</th><th>En nuestro proyecto</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>CLIENT_ID</code></td>
+      <td>Identificador público de la aplicación registrada en Spotify Developer</td>
+      <td>Guardado en <code>spotify.config.json</code>. No es secreto — Spotify lo usa para saber qué app pide permiso</td>
+    </tr>
+    <tr>
+      <td><code>CLIENT_SECRET</code></td>
+      <td>Clave secreta de la aplicación. Como una contraseña de la app (no del usuario)</td>
+      <td>También en <code>spotify.config.json</code>. Solo se envía al servidor de Spotify, nunca al navegador</td>
+    </tr>
+    <tr>
+      <td><code>REDIRECT_URI</code></td>
+      <td>URL a la que Spotify redirige al usuario después de autorizar. Debe estar registrada en el Dashboard</td>
+      <td><code>http://127.0.0.1:8888/callback</code> — el servidor que lanza <code>auth_windows.js</code></td>
+    </tr>
+    <tr>
+      <td><code>scope</code></td>
+      <td>Lista de permisos que la app pide al usuario</td>
+      <td><code>user-read-playback-state user-modify-playback-state streaming</code> — ver y controlar la reproducción</td>
+    </tr>
+    <tr>
+      <td><code>code</code></td>
+      <td>Código temporal (válido pocos segundos) que Spotify envía tras la autorización</td>
+      <td>Se recibe en el callback y se intercambia inmediatamente por el token</td>
+    </tr>
+    <tr>
+      <td><code>access_token</code></td>
+      <td>Token de acceso. Se incluye en cada petición a la API de Spotify como cabecera <code>Authorization: Bearer ...</code></td>
+      <td>Guardado en el archivo JSON de token. Válido 1 hora</td>
+    </tr>
+    <tr>
+      <td><code>refresh_token</code></td>
+      <td>Token permanente para obtener nuevos access_tokens sin pedir permiso de nuevo</td>
+      <td>También en el JSON. MMM-Spotify lo usa automáticamente cuando el access_token expira</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="arch">
+<span class="layer">Lo que hace auth_windows.js paso a paso</span>
+<br><br>
+<span class="box-a">1. Lee spotify.config.json</span> → obtiene CLIENT_ID, CLIENT_SECRET y ruta del token
+<br>
+<span class="box-a">2. Comprueba si ya existe el archivo de token</span> → si existe, sale (ya está autenticado)
+<br>
+<span class="box-a">3. Construye la URL de autorización:</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">https://accounts.spotify.com/authorize</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">?response_type=code</span>   <span style="color:#475569">← pedir código de autorización</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">&client_id=...</span>         <span style="color:#475569">← identificar la app</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">&scope=...</span>             <span style="color:#475569">← permisos solicitados</span>
+<br>
+&nbsp;&nbsp;<span class="box-c">&redirect_uri=http://127.0.0.1:8888/callback</span>
+<br>
+<span class="box-a">4. Lanza un servidor HTTP en localhost:8888</span> con <code>http.createServer()</code>
+<br>
+<span class="box-a">5. Muestra la URL en consola</span> → el usuario la abre y acepta en el navegador
+<br>
+<span class="box-a">6. Spotify redirige a localhost:8888/callback?code=XXXX</span>
+<br>
+<span class="box-a">7. El servidor captura el <code>code</code></span> de los parámetros de la URL
+<br>
+<span class="box-a">8. Hace POST a accounts.spotify.com/api/token</span> con el code + credenciales
+<br>
+<span class="box-a">9. Spotify devuelve access_token + refresh_token</span> en JSON
+<br>
+<span class="box-a">10. Calcula expires_at</span> = ahora + (expires_in - 60) segundos → por seguridad, renueva 1 min antes
+<br>
+<span class="box-a">11. Guarda el token en MagicMirror_token.json</span> → cierra el servidor → proceso terminado
+</div>
+
+<!-- ──────────────────────────────────────────────
+     8.8 — IMG.HTML: SOLUCIÓN X-FRAME-OPTIONS
+─────────────────────────────────────────────── -->
+<h3>8.8 · img.html — la solución al bloqueo de iframes</h3>
+
+<p>MMM-SmartWebDisplay muestra contenido dentro de un <code>&lt;iframe&gt;</code>. El problema: muchos servidores web (incluidos CDNs de imágenes) envían la cabecera HTTP <code>X-Frame-Options: DENY</code> o <code>Content-Security-Policy: frame-ancestors 'none'</code>, que instruye al navegador a <strong>negarse a mostrar ese contenido dentro de un iframe</strong>. Es una medida de seguridad anti-clickjacking.</p>
+
+<div class="arch">
+<span class="layer">¿Qué es clickjacking? (por qué existe X-Frame-Options)</span>
+<br>
+<span style="color:#475569">Un atacante incrusta tu banco dentro de un iframe transparente encima de un botón falso.</span>
+<br>
+<span style="color:#475569">El usuario cree que hace clic en "Descargar" pero en realidad pulsa "Transferir dinero" en el banco.</span>
+<br>
+<span style="color:#475569">X-Frame-Options evita exactamente esto: el banco dice "no me metas en iframes".</span>
+</div>
+
+<p>La solución: en lugar de intentar cargar la imagen del CDN directamente en el iframe, se crea <code>img.html</code>, un archivo HTML mínimo <strong>servido por nuestro propio servidor</strong> (localhost:8080). Dentro de ese archivo, una etiqueta <code>&lt;img&gt;</code> carga la imagen.</p>
+
+<div class="arch">
+<span class="layer">Contenido completo de img.html</span>
+<br><br>
+<span class="box-b">&lt;!DOCTYPE html&gt;</span>
+<br>
+<span class="box-b">&lt;html&gt;&lt;head&gt;</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">&lt;style&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">* { margin: 0; padding: 0; }</span>                          <span style="color:#475569">← sin márgenes</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">body { background: #000; display: flex;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">align-items: center; justify-content: center; }</span>  <span style="color:#475569">← imagen centrada</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">img { max-width: 100%; max-height: 100%; object-fit: contain; }</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">&lt;/style&gt;</span>
+<br>
+<span class="box-b">&lt;/head&gt;&lt;body&gt;</span>
+<br>
+&nbsp;&nbsp;<span class="box-d">&lt;img id="pic" src=""&gt;</span>                               <span style="color:#475569">← imagen vacía al principio</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">&lt;script&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">const src = new URLSearchParams(location.search).get('src')</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#475569">// URLSearchParams lee los parámetros de la URL (?src=http://...)</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#475569">// location.search es la parte "?src=..." de la URL actual</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#475569">// .get('src') extrae el valor del parámetro llamado "src"</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">if (src) document.getElementById('pic').src = src</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#475569">// Si hay valor, lo asigna al atributo src de la etiqueta img</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">&lt;/script&gt;</span>
+<br>
+<span class="box-b">&lt;/body&gt;&lt;/html&gt;</span>
+</div>
+
+<p>La URL completa que usa config.js es:</p>
+<code style="display:block;background:#1e293b;color:#38bdf8;padding:12px 16px;border-radius:8px;font-size:13px;margin:12px 0;word-break:break-all">http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/img1.jpg</code>
+<p>El iframe carga <code>img.html</code> (mismo origen: localhost:8080 → sin restricciones). Ese HTML, con JavaScript, extrae la ruta de la imagen del parámetro <code>src</code> y la carga con <code>&lt;img&gt;</code>. Una imagen con <code>&lt;img&gt;</code> no tiene restricciones de origen cruzado.</p>
+
+<!-- ──────────────────────────────────────────────
+     8.9 — RSS Y NEWSFEED
+─────────────────────────────────────────────── -->
+<h3>8.9 · RSS — cómo se consumen las noticias</h3>
+
+<p>RSS (Really Simple Syndication) es un formato estándar basado en XML que los medios de comunicación usan para publicar sus titulares. El módulo <code>newsfeed</code> descarga estos archivos XML y extrae los titulares para mostrarlos en rotación.</p>
+
+<div class="arch">
+<span class="layer">Estructura simplificada de un RSS</span>
+<br><br>
+<span class="box-b">&lt;rss version="2.0"&gt;</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">&lt;channel&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">&lt;title&gt;El País&lt;/title&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">&lt;item&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">&lt;title&gt;Pedro Sánchez anuncia nuevas medidas...&lt;/title&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">&lt;link&gt;https://elpais.com/articulo/1234&lt;/link&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">&lt;pubDate&gt;Mon, 17 Mar 2026 10:30:00 GMT&lt;/pubDate&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">&lt;/item&gt;</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">&lt;item&gt; ... &lt;/item&gt;</span>
+<br>
+&nbsp;&nbsp;<span class="box-a">&lt;/channel&gt;</span>
+<br>
+<span class="box-b">&lt;/rss&gt;</span>
+</div>
+
+<p>El módulo descarga el XML cada <code>reloadInterval</code> milisegundos (300.000 ms = 5 minutos), lo parsea y pone los titulares en cola. Cada <code>updateInterval</code> (7.500 ms = 7,5 segundos) muestra el siguiente titular con una animación de fade.</p>
+
+<!-- ──────────────────────────────────────────────
+     8.10 — MMM-JAST Y YAHOO FINANCE
+─────────────────────────────────────────────── -->
+<h3>8.10 · MMM-Jast — cotizaciones sin API key</h3>
+
+<p>Yahoo Finance ofrece datos de cotizaciones a través de una URL no oficial que devuelve JSON. MMM-Jast construye esa URL con el símbolo del activo y la consume directamente. Por eso no necesita registro ni API key: Yahoo Finance no requiere autenticación para consultas básicas.</p>
+
+<div class="arch">
+<span class="layer">Símbolos configurados y por qué</span>
+<br><br>
+<span class="box-a">BTC-EUR</span>   <span style="color:#475569">← Bitcoin cotizado en euros. El sufijo "-EUR" indica la divisa</span>
+<br>
+<span class="box-a">DOGE-EUR</span>  <span style="color:#475569">← Dogecoin en euros</span>
+<br>
+<span class="box-a">CL=F</span>      <span style="color:#475569">← Petróleo Crudo WTI (futuros). El sufijo "=F" indica contrato de futuros en Yahoo Finance. Cotiza en USD</span>
+</div>
+
+<p>El módulo actualiza cada <code>updateIntervalInSeconds: 30</code> (30 segundos) y muestra los cambios en verde (subida) o rojo (bajada) con el porcentaje de variación diaria.</p>
+
+<!-- ──────────────────────────────────────────────
+     8.11 — PM2: AUTOARRANQUE
+─────────────────────────────────────────────── -->
+<h3>8.11 · PM2 — por qué se usa y qué hace exactamente</h3>
+
+<p>PM2 (Process Manager 2) es un gestor de procesos para Node.js. Su función es mantener la aplicación viva: si MagicMirror falla o el sistema se reinicia, PM2 lo relanza automáticamente.</p>
+
+<table>
+  <thead><tr><th>Problema sin PM2</th><th>Solución con PM2</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Si cierras la terminal, MagicMirror se para</td>
+      <td>PM2 lo ejecuta como demonio (proceso en segundo plano, independiente de la terminal)</td>
+    </tr>
+    <tr>
+      <td>Si el sistema se reinicia, hay que lanzar MagicMirror manualmente</td>
+      <td><code>pm2 startup</code> registra PM2 como servicio del sistema operativo → arranca solo al iniciar el PC</td>
+    </tr>
+    <tr>
+      <td>Si hay un error que mata el proceso, el espejo se apaga</td>
+      <td>PM2 detecta que el proceso murió y lo reinicia automáticamente</td>
+    </tr>
+    <tr>
+      <td>Difícil ver qué está pasando en segundo plano</td>
+      <td><code>pm2 logs MagicMirror</code> muestra los logs en tiempo real aunque no haya terminal abierta</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="arch">
+<span class="layer">Comandos PM2 más usados en este proyecto</span>
+<br><br>
+<span class="box-b">pm2 start npm --name "MagicMirror" -- run server</span>
+<br>
+<span style="color:#475569">  → Lanza MagicMirror en modo servidor (sin Electron). El nombre "MagicMirror" es el alias.</span>
+<br>
+<span style="color:#475569">  → "-- run server" es el argumento que se pasa a npm (equivale a "npm run server")</span>
+<br><br>
+<span class="box-b">pm2 save</span>
+<br>
+<span style="color:#475569">  → Guarda la lista de procesos activos para que pm2 startup los recuerde</span>
+<br><br>
+<span class="box-b">pm2 startup</span>
+<br>
+<span style="color:#475569">  → Genera e imprime un comando sudo que registra PM2 en el sistema operativo</span>
+<br>
+<span style="color:#475569">  → Hay que copiar y ejecutar ese comando manualmente (requiere permisos de root)</span>
+<br><br>
+<span class="box-b">pm2 logs MagicMirror</span>     <span style="color:#475569">← Ver qué está pasando en tiempo real</span>
+<br>
+<span class="box-b">pm2 restart MagicMirror</span>  <span style="color:#475569">← Aplicar cambios en config.js sin reiniciar el sistema</span>
+<br>
+<span class="box-b">pm2 stop MagicMirror</span>     <span style="color:#475569">← Parar el espejo sin matar PM2</span>
+<br>
+<span class="box-b">pm2 status</span>               <span style="color:#475569">← Ver estado de todos los procesos gestionados</span>
+</div>
+
+<!-- ──────────────────────────────────────────────
+     8.12 — RESUMEN INTERACCIÓN TOTAL
+─────────────────────────────────────────────── -->
+<h3>8.12 · Mapa completo de interacciones — cómo todo se conecta</h3>
+
+<p>Este diagrama muestra cómo todos los componentes del sistema se comunican entre sí en el sistema completo y operativo:</p>
+
+<div class="arch">
+<span style="color:#475569">┌─────────────────────────── EXTERIOR ─────────────────────────────┐</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-a">OpenWeatherMap</span>  <span class="box-a">Spotify</span>  <span class="box-a">Yahoo Finance</span>  <span class="box-a">RSS (El País...)</span>  <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">└──────────────────────┬──────────────────────────────────────────┘</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">│ HTTP REST / RSS</span>
+<br>
+<span style="color:#475569">┌──────────────────────▼──────────────────────────────────────────┐</span>
+<br>
+<span style="color:#475569">│</span>  <span class="layer">SERVIDOR NODE.JS (puerto 8080)</span>                              <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-b">node_helper.js</span> (weather · Jast · Spotify · newsfeed)        <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-b">Express</span> → sirve HTML/CSS/JS/imágenes                        <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-b">Socket.io server</span> → canal bidireccional con el navegador     <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-b">API REST</span> (MMM-Remote-Control) → recibe comandos de la red   <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">└──────────────────────┬────────────────────────▲────────────────┘</span>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-c">Socket.io │ datos</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="box-d">│ POST /api/notification</span>
+<br>
+<span style="color:#475569">┌──────────────────────▼────────────┐</span>  <span style="color:#475569">┌────────▼──────────────────────────┐</span>
+<br>
+<span style="color:#475569">│</span>  <span class="layer">ELECTRON / CHROMIUM</span>          <span style="color:#475569">│</span>  <span style="color:#475569">│</span>  <span class="layer">DISPOSITIVOS DE LA RED</span>       <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-c">Módulos JS</span> → getDom() → HTML   <span style="color:#475569">│</span>  <span style="color:#475569">│</span>  <span class="box-d">PAGINAS.html</span> (móvil, tablet)  <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-c">MMM-pages</span> → oculta/muestra    <span style="color:#475569">│</span>  <span style="color:#475569">│</span>  <span class="box-d">remote.html</span> (panel completo)  <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">│</span>  <span class="box-c">Pantalla del espejo</span> ←────────<span style="color:#475569">┘</span>  <span style="color:#475569">│</span>  <span class="box-d">curl / scripts</span>                <span style="color:#475569">│</span>
+<br>
+<span style="color:#475569">└──────────────────────────────────┘</span>  <span style="color:#475569">└──────────────────────────────────┘</span>
+</div>
+
+<div class="highlight" style="margin-top:24px">
+  <strong>La regla de oro para exponer este proyecto</strong>
+  <p style="margin-top:10px;margin-bottom:4px">Cada vez que algo cambia en la pantalla, ha pasado por este camino:</p>
+  <p style="margin-bottom:4px;color:#94a3b8"><strong style="color:#60a5fa">Fuente externa</strong> → node_helper.js la consulta → Socket.io lleva los datos → módulo frontend los pinta → pantalla actualizada</p>
+  <p style="margin-bottom:0;color:#94a3b8">Y cada vez que alguien controla el espejo desde fuera:</p>
+  <p style="margin-bottom:0;color:#94a3b8"><strong style="color:#60a5fa">Dispositivo de la red</strong> → POST a la API REST → MagicMirror propaga la notificación → módulo reacciona → pantalla actualizada</p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     9 — CONFIGURACIÓN DETALLADA DE CADA MÓDULO
+═══════════════════════════════════════════════ -->
+<h2><span class="num">9</span>Configuración detallada — cada parámetro explicado</h2>
+
+<p>Aquí se detalla cada parámetro de cada módulo: qué hace, por qué tiene ese valor y qué pasaría si lo cambias. Es la parte más densa pero la más útil para responder preguntas técnicas.</p>
+
+<!-- ─── 9.1 clock ─── -->
+<h3>9.1 · clock — reloj digital</h3>
+<p>El módulo <code>clock</code> es nativo de MagicMirror². No necesita ninguna instalación adicional ni API key. Se renderiza en <code>top_left</code> para ocupar la esquina superior izquierda, posición tradicional del reloj en un espejo.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor usado</th><th>Qué hace</th><th>Alternativas</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>displayType</code></td>
+      <td><code>"digital"</code></td>
+      <td>Muestra el reloj en formato numérico digital (solo números). La pantalla retroiluminada maximiza la legibilidad con texto grande y claro.</td>
+      <td><code>"analog"</code> muestra un reloj de agujas. <code>"both"</code> muestra los dos. Se eligió digital porque ocupa menos espacio y es más legible desde distancia.</td>
+    </tr>
+    <tr>
+      <td><code>timeFormat</code></td>
+      <td><code>24</code></td>
+      <td>Usa formato de 24 horas (13:45 en lugar de 1:45 PM). Coherente con el estándar europeo.</td>
+      <td><code>12</code> usa AM/PM. En España el formato 24h es el habitual.</td>
+    </tr>
+    <tr>
+      <td><code>displaySeconds</code></td>
+      <td><code>false</code></td>
+      <td>Oculta los segundos. El reloj muestra HH:MM sin los segundos.</td>
+      <td>Si fuera <code>true</code>, el DOM se repintaría cada segundo. Sin segundos, solo se repinta cada minuto, reduciendo el trabajo del renderizador.</td>
+    </tr>
+    <tr>
+      <td><code>showDate</code></td>
+      <td><code>true</code></td>
+      <td>Muestra la fecha debajo de la hora.</td>
+      <td>Si fuera <code>false</code>, solo se vería la hora.</td>
+    </tr>
+    <tr>
+      <td><code>dateFormat</code></td>
+      <td><code>"dddd, D MMMM"</code></td>
+      <td>Formato Moment.js para la fecha. Resultado: <em>"lunes, 17 marzo"</em>. El formato es legible y no incluye el año (innecesario en un espejo del día a día).</td>
+      <td><code>"DD/MM/YYYY"</code> daría "17/03/2026". Los códigos de Moment.js: <code>dddd</code>=día semana completo, <code>D</code>=día número, <code>MMMM</code>=mes completo, <code>YYYY</code>=año 4 dígitos.</td>
+    </tr>
+    <tr>
+      <td><code>showWeek</code></td>
+      <td><code>false</code></td>
+      <td>Oculta el número de semana del año (ej: "Semana 11").</td>
+      <td>Solo útil si se trabaja con calendarios por semanas. Se omite para mantener la interfaz limpia.</td>
+    </tr>
+    <tr>
+      <td><code>timezone</code></td>
+      <td><code>"Europe/Madrid"</code></td>
+      <td>Fuerza la zona horaria a Madrid (España peninsular). Importante si el servidor corre en una máquina configurada con UTC.</td>
+      <td>Sin este parámetro, usa la zona horaria del sistema operativo. Al poner <code>"Europe/Madrid"</code> el módulo funciona correctamente aunque el SO esté en UTC (como muchos servidores Linux).</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.2 weather ─── -->
+<h3>9.2 · weather — tiempo actual y previsión</h3>
+<p>Se usan <strong>dos instancias</strong> del módulo <code>weather</code> en la misma posición (<code>top_right</code>): una para el tiempo actual y otra para la previsión de 5 días. Ambas tienen el mismo <code>apiKey</code> y <code>location</code>, pero difieren en el <code>weatherEndpoint</code> y algunos parámetros de visualización. MagicMirror apila los módulos en la misma posición verticalmente.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace y por qué</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>weatherProvider</code></td>
+      <td><code>"openweathermap"</code></td>
+      <td>Indica qué proveedor de datos usar. El módulo nativo soporta varios (darksky, weatherbit, etc). Se eligió OpenWeatherMap porque tiene plan gratuito sin tarjeta.</td>
+    </tr>
+    <tr>
+      <td><code>weatherEndpoint</code></td>
+      <td><code>"/weather"</code> / <code>"/forecast"</code></td>
+      <td>Ruta del endpoint de OpenWeatherMap. <code>/weather</code> devuelve el tiempo actual en ese instante. <code>/forecast</code> devuelve predicciones cada 3 horas para los próximos 5 días.</td>
+    </tr>
+    <tr>
+      <td><code>apiVersion</code></td>
+      <td><code>"2.5"</code></td>
+      <td>Versión de la API de OpenWeatherMap. La versión 2.5 es gratuita sin tarjeta de crédito. La 3.0 (One Call API) exige tarjeta aunque no se llegue al límite gratuito. Esta es la decisión técnica más importante de este módulo.</td>
+    </tr>
+    <tr>
+      <td><code>apiKey</code></td>
+      <td><code>"de8f1dc0..."</code></td>
+      <td>Clave de autenticación para OpenWeatherMap. Se obtiene registrándose en openweathermap.org. Se incluye en cada petición HTTP como parámetro <code>&appid=</code>. Sin ella, la API devuelve error 401 Unauthorized.</td>
+    </tr>
+    <tr>
+      <td><code>location</code></td>
+      <td><code>"Valencia,ES"</code></td>
+      <td>Ciudad y código de país ISO. El módulo la pasa como <code>?q=Valencia,ES</code> a la API. Se incluye el código de país para evitar ambigüedad (hay una Valencia en Venezuela).</td>
+    </tr>
+    <tr>
+      <td><code>units</code></td>
+      <td><code>"metric"</code></td>
+      <td>Sistema de unidades. <code>metric</code> → temperatura en °C, viento en m/s. <code>imperial</code> → °F y mph. <code>standard</code> → Kelvin. Para España, siempre metric.</td>
+    </tr>
+    <tr>
+      <td><code>lang</code></td>
+      <td><code>"es"</code></td>
+      <td>Idioma de las descripciones meteorológicas. OpenWeatherMap traduce el texto (<em>"cielo despejado"</em>, <em>"lluvia ligera"</em>) al idioma solicitado. Sin este parámetro, daría en inglés.</td>
+    </tr>
+    <tr>
+      <td><code>updateInterval</code></td>
+      <td><code>600000</code> / <code>1800000</code></td>
+      <td>Milisegundos entre actualizaciones. El tiempo actual se refresca cada 10 minutos (600.000 ms). La previsión cada 30 minutos (1.800.000 ms). La previsión cambia más despacio, así que con menos peticiones es suficiente y se ahorra en la cuota de la API.</td>
+    </tr>
+    <tr>
+      <td><code>showWindDirection</code></td>
+      <td><code>true</code></td>
+      <td>Muestra la dirección del viento (N, NE, E...). Útil para saber si el viento viene del mar o de tierra.</td>
+    </tr>
+    <tr>
+      <td><code>showHumidity</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el porcentaje de humedad relativa. Relevante en Valencia por el clima mediterráneo.</td>
+    </tr>
+    <tr>
+      <td><code>showFeelsLike</code></td>
+      <td><code>true</code></td>
+      <td>Muestra la temperatura sensación térmica (wind chill + humedad). Más útil que la temperatura real para decidir cómo vestirse.</td>
+    </tr>
+    <tr>
+      <td><code>type</code></td>
+      <td><code>"forecast"</code></td>
+      <td>Solo en la segunda instancia. Le indica al módulo que debe renderizar el widget de previsión (lista de días) en lugar del de tiempo actual.</td>
+    </tr>
+    <tr>
+      <td><code>maxNumberOfDays</code></td>
+      <td><code>5</code></td>
+      <td>Número de días a mostrar en la previsión. La API data/2.5/forecast devuelve hasta 5 días. Se muestran todos.</td>
+    </tr>
+    <tr>
+      <td><code>maxEntries</code></td>
+      <td><code>10</code></td>
+      <td>Máximo de entradas horarias a mostrar. La previsión tiene una entrada cada 3 horas; 10 entradas = ~30 horas de previsión detallada.</td>
+    </tr>
+    <tr>
+      <td><code>fade</code></td>
+      <td><code>true</code></td>
+      <td>Aplica un gradiente de opacidad a las entradas más lejanas en el tiempo. Las predicciones de dentro de 5 días son menos fiables; el fade visual lo comunica intuitivamente.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.3 compliments ─── -->
+<h3>9.3 · compliments — frases motivacionales</h3>
+<p>El módulo <code>compliments</code> muestra frases rotativas en <code>lower_third</code> (tercio inferior de la pantalla). Es un módulo nativo de MagicMirror², diseñado para personalizar la experiencia del espejo con mensajes según la hora del día.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>morningStartTime</code> / <code>morningEndTime</code></td>
+      <td><code>5</code> y <code>12</code></td>
+      <td>Define el rango de horas considerado "mañana": de las 05:00 a las 12:00. Durante ese período se muestran los mensajes del grupo <code>morning</code>.</td>
+    </tr>
+    <tr>
+      <td><code>afternoonStartTime</code> / <code>afternoonEndTime</code></td>
+      <td><code>12</code> y <code>20</code></td>
+      <td>Tarde: de 12:00 a 20:00. El resto (20:00–05:00) se considera noche automáticamente.</td>
+    </tr>
+    <tr>
+      <td><code>fadeSpeed</code></td>
+      <td><code>4000</code></td>
+      <td>Duración de la animación de cambio de frase en milisegundos (4 segundos de fade in/out).</td>
+    </tr>
+    <tr>
+      <td><code>updateInterval</code></td>
+      <td><code>30000</code></td>
+      <td>Cada 30 segundos cambia la frase mostrada. Si hay pocas frases configuradas, las repite en bucle.</td>
+    </tr>
+    <tr>
+      <td><code>compliments</code> (comentado)</td>
+      <td>—</td>
+      <td>Bloque opcional para definir frases personalizadas agrupadas por momento del día o fecha especial (por ejemplo <code>"....-12-25"</code> para Navidad). Está descomentado para mostrar cómo funcionaría; en producción se personalizaría.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.4 newsfeed ─── -->
+<h3>9.4 · newsfeed — noticias RSS</h3>
+<p>El módulo <code>newsfeed</code> está en posición <code>bottom_bar</code> (barra inferior, ancho completo), junto al módulo <code>MMM-Page-Indicator</code>. Es un módulo <strong>fijo</strong> (aparece en todas las páginas).</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>feeds</code></td>
+      <td>Array de 3 fuentes</td>
+      <td>Lista de feeds RSS a consumir. Cada objeto tiene <code>title</code> (nombre visible) y <code>url</code> (URL del XML RSS). Se eligieron El País, La Vanguardia y RTVE por ser medios nacionales de referencia con RSS públicos y gratuitos.</td>
+    </tr>
+    <tr>
+      <td><code>showSourceTitle</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el nombre del medio antes del titular (<em>"El País: Pedro Sánchez anuncia..."</em>). Útil para distinguir fuentes.</td>
+    </tr>
+    <tr>
+      <td><code>showPublishDate</code></td>
+      <td><code>false</code></td>
+      <td>Oculta la fecha de publicación. Se omite para no saturar la barra inferior con demasiado texto.</td>
+    </tr>
+    <tr>
+      <td><code>updateInterval</code></td>
+      <td><code>7500</code></td>
+      <td>Cada 7,5 segundos cambia al siguiente titular. Es el tiempo mínimo para leer un titular de longitud media sin prisa.</td>
+    </tr>
+    <tr>
+      <td><code>reloadInterval</code></td>
+      <td><code>300000</code></td>
+      <td>Cada 5 minutos descarga de nuevo el XML RSS de cada fuente para obtener titulares nuevos. No tiene sentido recargarlo más frecuentemente porque los medios no publican tan a menudo.</td>
+    </tr>
+    <tr>
+      <td><code>animationSpeed</code></td>
+      <td><code>2500</code></td>
+      <td>Duración de la transición de fade entre titulares en milisegundos. 2,5 segundos es suave sin ser lento.</td>
+    </tr>
+    <tr>
+      <td><code>maxNewsItems</code></td>
+      <td><code>10</code></td>
+      <td>Máximo de titulares en cola. Al completar la ronda de 10 titulares, vuelve al primero o recarga si ya pasó el <code>reloadInterval</code>.</td>
+    </tr>
+    <tr>
+      <td><code>hideLoading</code></td>
+      <td><code>true</code></td>
+      <td>No muestra el texto "Cargando..." mientras descarga el RSS. Evita un flash feo en la barra inferior al arrancar.</td>
+    </tr>
+    <tr>
+      <td><code>broadcastNewsFeeds</code> / <code>broadcastNewsUpdates</code></td>
+      <td><code>true</code></td>
+      <td>Emite notificaciones internas de MagicMirror cuando hay nuevos feeds o titulares. Permite que otros módulos reaccionen a las noticias. No se usa actualmente, pero se activa por si se añade un módulo de alertas en el futuro.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.5 MMM-Jast ─── -->
+<h3>9.5 · MMM-Jast — cotizaciones en tiempo real</h3>
+<p>MMM-Jast usa la API no oficial de Yahoo Finance. No requiere registro. Se ubica en <code>top_right</code> de la Página 2 (Finanzas).</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>currencyStyle</code></td>
+      <td><code>"code"</code></td>
+      <td>Cómo mostrar la divisa junto al valor. <code>"code"</code> → "EUR", <code>"symbol"</code> → "€", <code>"name"</code> → "Euro". Se eligió <code>code</code> porque es más compacto y claro en una pantalla.</td>
+    </tr>
+    <tr>
+      <td><code>fadeSpeedInSeconds</code></td>
+      <td><code>3</code></td>
+      <td>Velocidad de la animación de aparición de los valores al actualizar (3 segundos de fade).</td>
+    </tr>
+    <tr>
+      <td><code>displayMode</code></td>
+      <td><code>"vertical"</code></td>
+      <td>Disposición visual: <code>vertical</code> apila cada activo en una fila. <code>horizontal</code> los pone en columna. <code>table</code> usa formato tabla. <code>none</code> solo el widget, sin lista. Vertical encaja mejor con la posición <code>top_right</code>.</td>
+    </tr>
+    <tr>
+      <td><code>numberDecimalsValues</code></td>
+      <td><code>2</code></td>
+      <td>Decimales para los precios (ej: 52.341,67 EUR). 2 decimales es el estándar para valores monetarios.</td>
+    </tr>
+    <tr>
+      <td><code>numberDecimalsPercentages</code></td>
+      <td><code>1</code></td>
+      <td>Decimales para los porcentajes de cambio (ej: +2.3%). Con 1 decimal es suficiente para comunicar la dirección y magnitud.</td>
+    </tr>
+    <tr>
+      <td><code>showColors</code></td>
+      <td><code>true</code></td>
+      <td>Colorea el cambio porcentual: verde si sube, rojo si baja. Información inmediata sin leer el número.</td>
+    </tr>
+    <tr>
+      <td><code>showCurrency</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el código de divisa junto al precio (EUR / USD).</td>
+    </tr>
+    <tr>
+      <td><code>showChangePercent</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el cambio en porcentaje desde la apertura del mercado.</td>
+    </tr>
+    <tr>
+      <td><code>showChangeValue</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el cambio en valor absoluto (ej: +1.234 EUR).</td>
+    </tr>
+    <tr>
+      <td><code>showChangeValueCurrency</code></td>
+      <td><code>false</code></td>
+      <td>Oculta la divisa junto al cambio absoluto para no repetir información (ya se muestra con <code>showCurrency</code>).</td>
+    </tr>
+    <tr>
+      <td><code>showLastUpdate</code></td>
+      <td><code>true</code></td>
+      <td>Muestra la hora de la última actualización. Importante para saber si los datos son en tiempo real o están retrasados (mercados cerrados por la noche).</td>
+    </tr>
+    <tr>
+      <td><code>showHiddenStocks</code></td>
+      <td><code>false</code></td>
+      <td>MMM-Jast permite marcar activos como "ocultos" desde la interfaz. Esta opción controla si se muestran igualmente.</td>
+    </tr>
+    <tr>
+      <td><code>stocksPerPage</code></td>
+      <td><code>3</code></td>
+      <td>Número de activos visibles a la vez. Con 3 activos configurados y <code>stocksPerPage: 3</code>, se muestran todos sin paginación.</td>
+    </tr>
+    <tr>
+      <td><code>useGrouping</code></td>
+      <td><code>true</code></td>
+      <td>Usa separadores de miles en los números (52.341,67 en lugar de 52341.67). Mejora la legibilidad de valores grandes como Bitcoin.</td>
+    </tr>
+    <tr>
+      <td><code>updateIntervalInSeconds</code></td>
+      <td><code>30</code></td>
+      <td>Actualiza los precios cada 30 segundos. Las criptomonedas fluctúan continuamente; 30 segundos es un buen balance entre actualidad y número de peticiones a Yahoo Finance.</td>
+    </tr>
+    <tr>
+      <td><code>stocks</code> array</td>
+      <td>3 activos</td>
+      <td>Lista de activos a monitorizar. Cada uno tiene <code>name</code> (texto visible) y <code>symbol</code> (código Yahoo Finance). El símbolo debe ser exactamente el que usa Yahoo Finance, distinguiendo mayúsculas.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="highlight">
+  <strong>Sobre los símbolos de Yahoo Finance</strong>
+  <p style="margin-top:8px;margin-bottom:4px">El formato del símbolo determina qué activo se consulta y en qué divisa:</p>
+  <p style="margin-bottom:0;color:#94a3b8">
+    <code>BTC-EUR</code> → Bitcoin cotizado en euros. Formato: <code>ACTIVO-DIVISA</code><br>
+    <code>DOGE-EUR</code> → Dogecoin en euros. Mismo formato.<br>
+    <code>CL=F</code> → Petróleo Crudo WTI (West Texas Intermediate), contrato de futuros. El sufijo <code>=F</code> indica futuros en Yahoo Finance. Cotiza en USD porque el mercado de materias primas es en dólares.
+  </p>
+</div>
+
+<!-- ─── 9.6 MMM-Spotify ─── -->
+<h3>9.6 · MMM-Spotify — reproductor de música</h3>
+<p>MMM-Spotify se ubica en <code>bottom_left</code> de la Página 2. Es el módulo más complejo en cuanto a configuración inicial (requiere autenticación OAuth) pero luego funciona de forma completamente automática.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>style</code></td>
+      <td><code>"default"</code></td>
+      <td>Modo de visualización del widget. <code>"default"</code> muestra portada del álbum grande, nombre de canción, artista, álbum, barra de progreso y controles de reproducción. <code>"mini"</code> es una versión compacta sin portada.</td>
+    </tr>
+    <tr>
+      <td><code>moduleWidth</code></td>
+      <td><code>360</code></td>
+      <td>Ancho en píxeles del widget. 360px es suficiente para mostrar la portada y el texto sin que el módulo ocupe demasiado espacio en pantalla.</td>
+    </tr>
+    <tr>
+      <td><code>control</code></td>
+      <td><code>"default"</code></td>
+      <td>Muestra los botones de control (anterior, play/pause, siguiente). <code>"hidden"</code> solo mostraría la información sin controles. Se mantienen visibles para poder interactuar desde la pantalla táctil si la hubiera.</td>
+    </tr>
+    <tr>
+      <td><code>showAlbumLabel</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el nombre del álbum.</td>
+    </tr>
+    <tr>
+      <td><code>showVolumeLabel</code></td>
+      <td><code>true</code></td>
+      <td>Muestra el nivel de volumen actual del dispositivo Spotify.</td>
+    </tr>
+    <tr>
+      <td><code>showAccountButton</code></td>
+      <td><code>true</code></td>
+      <td>Muestra un botón para cambiar entre cuentas de Spotify (si hay varias configuradas en <code>spotify.config.json</code>).</td>
+    </tr>
+    <tr>
+      <td><code>showDeviceButton</code></td>
+      <td><code>true</code></td>
+      <td>Muestra un botón para cambiar el dispositivo de reproducción activo (móvil, altavoz, etc.).</td>
+    </tr>
+    <tr>
+      <td><code>showAccountName</code></td>
+      <td><code>false</code></td>
+      <td>Oculta el nombre de la cuenta Spotify. Privacidad: no mostrar el nombre de usuario en pantalla pública.</td>
+    </tr>
+    <tr>
+      <td><code>updateInterval</code></td>
+      <td><code>1000</code></td>
+      <td>Cuando hay música reproduciéndose, consulta el estado a Spotify cada 1 segundo. Esto permite que la barra de progreso avance suavemente.</td>
+    </tr>
+    <tr>
+      <td><code>idleInterval</code></td>
+      <td><code>10000</code></td>
+      <td>Cuando no hay reproducción activa, reduce las peticiones a cada 10 segundos. Así no se saturan las peticiones a la API de Spotify innecesariamente.</td>
+    </tr>
+    <tr>
+      <td><code>defaultAccount</code></td>
+      <td><code>0</code></td>
+      <td>Índice de la cuenta a usar en <code>spotify.config.json</code>. El índice 0 es la primera (y única) cuenta configurada.</td>
+    </tr>
+    <tr>
+      <td><code>volumeSteps</code></td>
+      <td><code>5</code></td>
+      <td>Porcentaje que sube o baja el volumen por cada pulsación del botón de volumen. Con pasos de 5%, de 0% a 100% son 20 pulsaciones.</td>
+    </tr>
+    <tr>
+      <td><code>deviceDisplay</code></td>
+      <td><code>"Reproduciendo en"</code></td>
+      <td>Texto que aparece antes del nombre del dispositivo activo (ej: <em>"Reproduciendo en iPhone de Juan"</em>). Se personaliza en español.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.7 MMM-SmartWebDisplay ─── -->
+<h3>9.7 · MMM-SmartWebDisplay — galería de imágenes</h3>
+<p>Este módulo incrusta contenido mediante un <code>&lt;iframe&gt;</code>. En este proyecto se usa para crear una galería de imágenes que rota automáticamente. Se ubica en <code>middle_center</code> de la Página 3.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>url</code></td>
+      <td>Array de 7 URLs</td>
+      <td>Lista de URLs a mostrar en el iframe. Cada URL apunta a <code>img.html</code> con el parámetro <code>?src=ruta_imagen</code>. El módulo las recorre en orden y vuelve a la primera al llegar al final. <strong>Ojo: el parámetro se llama <code>url</code> (singular), no <code>urls</code></strong>. Error que ocurrió en desarrollo.</td>
+    </tr>
+    <tr>
+      <td><code>updateInterval</code></td>
+      <td><code>0</code></td>
+      <td>Minutos entre recargas del iframe actual. Con 0, el iframe no se recarga automáticamente. Innecesario para imágenes estáticas (no cambian).</td>
+    </tr>
+    <tr>
+      <td><code>NextURLInterval</code></td>
+      <td><code>1</code></td>
+      <td>Minutos entre cambios de imagen. Cada minuto pasa a la siguiente URL del array. Con 7 imágenes, la galería completa dura 7 minutos antes de repetir.</td>
+    </tr>
+    <tr>
+      <td><code>width</code></td>
+      <td><code>"550px"</code></td>
+      <td>Ancho del iframe en pantalla. Se ajusta para que la imagen sea visible en el centro de la pantalla sin solapar otros módulos.</td>
+    </tr>
+    <tr>
+      <td><code>height</code></td>
+      <td><code>"550px"</code></td>
+      <td>Alto del iframe. Cuadrado para que funcione tanto con fotos horizontales como verticales (<code>object-fit: contain</code> en img.html ajusta la imagen sin recortar).</td>
+    </tr>
+    <tr>
+      <td><code>scrolling</code></td>
+      <td><code>"no"</code></td>
+      <td>Deshabilita las barras de scroll dentro del iframe. Las imágenes siempre caben dentro del iframe; scroll sería antiestético.</td>
+    </tr>
+    <tr>
+      <td><code>displayLastUpdate</code></td>
+      <td><code>false</code></td>
+      <td>Oculta el texto con la fecha/hora de la última actualización del iframe. Innecesario para imágenes.</td>
+    </tr>
+    <tr>
+      <td><code>logDebug</code></td>
+      <td><code>false</code></td>
+      <td>Deshabilita los mensajes de depuración en consola. Solo se activa cuando hay problemas que diagnosticar.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.8 MMM-pages ─── -->
+<h3>9.8 · MMM-pages — sistema multipágina</h3>
+<p>MMM-pages no tiene posición en pantalla (no genera HTML visible). Su único trabajo es controlar qué módulos son visibles según la página activa. Es el módulo de "infraestructura" más importante del proyecto.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>modules</code></td>
+      <td>Array de 3 arrays</td>
+      <td>Define qué módulos pertenecen a cada página. Cada sub-array es una página. El orden es importante: el índice 0 es la Página 1, el índice 1 es la Página 2, etc. Los nombres deben coincidir exactamente con el campo <code>module:</code> en config.js.</td>
+    </tr>
+    <tr>
+      <td><code>fixed</code></td>
+      <td>4 módulos</td>
+      <td>Módulos que siempre son visibles, independientemente de la página. Se excluyen del mecanismo de ocultar/mostrar. Son los módulos de "infraestructura": <code>alert</code>, <code>MMM-Remote-Control</code>, <code>MMM-Page-Indicator</code>, <code>newsfeed</code>.</td>
+    </tr>
+    <tr>
+      <td><code>homePage</code></td>
+      <td><code>0</code></td>
+      <td>Índice de la página que se muestra al arrancar MagicMirror. 0 = Página 1 (Inicio). Es la más útil para ver al levantarse: hora y clima.</td>
+    </tr>
+    <tr>
+      <td><code>timings</code></td>
+      <td><code>{ default: 0 }</code></td>
+      <td>Tiempo en milisegundos que se muestra cada página antes de avanzar automáticamente. Con 0, no hay rotación automática: el usuario controla manualmente. Si fuera <code>{ default: 30000 }</code>, rotaría cada 30 segundos.</td>
+    </tr>
+    <tr>
+      <td><code>rotationDelay</code></td>
+      <td><code>10000</code></td>
+      <td>Si la rotación automática estuviera activada, este parámetro establece cuántos ms de pausa se aplican después de un cambio manual antes de reanudar la rotación. Evita que el espejo cambie de página justo cuando alguien lo está mirando.</td>
+    </tr>
+    <tr>
+      <td><code>animationTime</code></td>
+      <td><code>1000</code></td>
+      <td>Duración en milisegundos de la animación de transición entre páginas. 1 segundo de fade es suave pero no lento.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.9 MMM-Remote-Control ─── -->
+<h3>9.9 · MMM-Remote-Control — API REST y panel web</h3>
+<p>Este módulo extiende el servidor Express de MagicMirror con nuevas rutas HTTP. También genera un panel web en <code>/remote.html</code> y sirve el archivo <code>PAGINAS.html</code>. Se ubica en <code>bottom_right</code> para que su icono (si lo tiene) esté en la esquina inferior derecha.</p>
+
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>showModuleApiMenu</code></td>
+      <td><code>true</code></td>
+      <td>En el panel <code>/remote.html</code>, muestra un menú adicional donde se pueden ocultar/mostrar módulos individuales por nombre. Útil para depuración y para personalizar la pantalla en tiempo real sin tocar config.js.</td>
+    </tr>
+    <tr>
+      <td><code>secureEndpoints</code></td>
+      <td><code>false</code></td>
+      <td>Cuando es <code>false</code>, la API REST acepta peticiones sin autenticación. Cualquier dispositivo de la red puede llamar a los endpoints sin contraseña. Se eligió así porque el espejo opera en una red local privada. Si se pusiera en Internet, habría que activar la autenticación con un token.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ─── 9.10 MMM-Page-Indicator y alert ─── -->
+<h3>9.10 · MMM-Page-Indicator y alert</h3>
+
+<p><strong>MMM-Page-Indicator</strong> — Muestra puntos circulares en la barra inferior, uno por página. El punto de la página activa se resalta. Parámetros:</p>
+<table>
+  <thead><tr><th>Parámetro</th><th>Valor</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><code>pages</code></td>
+      <td><code>3</code></td>
+      <td>Número de puntos a renderizar. Debe coincidir exactamente con el número de páginas definidas en MMM-pages. Si hay 3 páginas y se pone <code>pages: 2</code>, el tercer punto no aparece aunque la tercera página exista.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p style="margin-top:20px"><strong>alert</strong> — No tiene parámetros de configuración propios. Es un módulo receptor: permanece inactivo hasta que otro módulo llama a la función interna <code>sendNotification("SHOW_ALERT", { type, title, message, timer })</code>. Entonces muestra un overlay a pantalla completa con el mensaje. Se incluye porque es necesario para el sistema de notificaciones interno de MagicMirror (algunos módulos lo usan para avisar de errores).</p>
+
+
+<!-- ═══════════════════════════════════════════════
+     10 — PREGUNTAS Y RESPUESTAS PARA EL JURADO
+═══════════════════════════════════════════════ -->
+<h2><span class="num">10</span>Preguntas que puede hacer el jurado — y sus respuestas</h2>
+
+<p>Esta sección recoge las preguntas más probables agrupadas por tema, con respuestas directas y técnicamente correctas.</p>
+
+<!-- ── Arquitectura general ── -->
+<h3>Arquitectura general</h3>
+
+<div class="problem"><strong>¿Por qué Node.js y no Python o Java?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  MagicMirror² está construido en Node.js, así que no es una elección libre sino una restricción del framework. Dicho esto, Node.js es adecuado: es excelente para servidores web con muchas conexiones concurrentes (gracias a su modelo de I/O no bloqueante), y el ecosistema npm tiene módulos para todo lo que necesita el proyecto (HTTP, WebSockets, OAuth). Electron también usa Node.js internamente para renderizar la interfaz.
+</div>
+
+<div class="problem"><strong>¿Qué es Electron exactamente?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Electron es un framework que permite crear aplicaciones de escritorio usando tecnologías web (HTML, CSS, JavaScript). Internamente combina <strong>Chromium</strong> (el motor del navegador Chrome) con <strong>Node.js</strong>. La interfaz del espejo es básicamente una página web que se renderiza a pantalla completa sin barras ni botones de navegador. Así MagicMirror puede usar HTML/CSS para el diseño y Node.js para la lógica de servidor, todo en un mismo proceso.
+</div>
+
+<div class="problem"><strong>¿Qué diferencia hay entre el servidor de MagicMirror (puerto 8080) y VS Code Live Server (puerto 5500)?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Son dos servidores web completamente independientes. El de MagicMirror es un servidor Express personalizado que sirve la aplicación, procesa notificaciones y expone la API REST. VS Code Live Server es una extensión del editor que sirve archivos estáticos del disco para previsualización en desarrollo — tiene recarga automática al guardar. En producción (en la Raspberry Pi o el PC del espejo) solo existe el servidor de MagicMirror; VS Code Live Server es solo una herramienta de desarrollo local.
+</div>
+
+<div class="problem"><strong>¿Podría el espejo funcionar sin conexión a internet?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Parcialmente. Los módulos que no dependen de APIs externas funcionarían sin internet: <code>clock</code> (usa el reloj del sistema), <code>compliments</code> (textos locales), <code>MMM-pages</code>, <code>MMM-Remote-Control</code>, <code>MMM-Page-Indicator</code>, <code>alert</code> y <code>MMM-SmartWebDisplay</code> (si las imágenes son locales, que es nuestro caso). Los que fallarían sin internet son <code>weather</code> (OpenWeatherMap), <code>newsfeed</code> (RSS), <code>MMM-Jast</code> (Yahoo Finance) y <code>MMM-Spotify</code> (API de Spotify). Estos simplemente dejarían de actualizar y mostrarían los últimos datos cacheados o una pantalla vacía.
+</div>
+
+<div class="problem"><strong>¿Qué pasa si MagicMirror falla o se reinicia el sistema?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Para eso está PM2. PM2 es un gestor de procesos de Node.js que monitoriza la aplicación. Si el proceso de MagicMirror muere por cualquier razón (error no capturado, crash), PM2 lo detecta y lo reinicia automáticamente. Con <code>pm2 startup</code> y <code>pm2 save</code>, PM2 se registra como servicio del sistema operativo y arranca con él. Así, cuando se enciende el PC del espejo, MagicMirror arranca solo sin intervención manual.
+</div>
+
+<!-- ── Módulos ── -->
+<h3>Sobre módulos y config.js</h3>
+
+<div class="problem"><strong>¿Cómo se añadiría un módulo nuevo al espejo?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El proceso estándar es: 1) clonar o descargar el módulo en la carpeta <code>modules/</code>, 2) ejecutar <code>npm install</code> dentro de la carpeta del módulo para instalar sus dependencias, 3) añadir su entrada en el array <code>modules[]</code> de config.js con su nombre exacto (igual que la carpeta), posición y opciones de configuración, 4) reiniciar MagicMirror con <code>pm2 restart MagicMirror</code>. Ese es todo el proceso gracias a la arquitectura modular.
+</div>
+
+<div class="problem"><strong>¿Por qué hay dos instancias del módulo <code>weather</code> en config.js?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  MagicMirror permite instanciar el mismo módulo varias veces con configuraciones diferentes. Se aprovecha esto para mostrar dos widgets distintos en la misma posición (<code>top_right</code>): uno con el tiempo actual (endpoint <code>/weather</code>) y otro con la previsión de 5 días (endpoint <code>/forecast</code>). Son dos instancias del mismo código base pero con parámetros distintos. MagicMirror los apila verticalmente en la misma columna.
+</div>
+
+<div class="problem"><strong>¿Por qué los nombres de módulos son sensibles a mayúsculas?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  MagicMirror carga los módulos buscando la carpeta cuyo nombre coincida exactamente con el campo <code>module:</code> en config.js. En Linux y macOS, el sistema de archivos distingue entre mayúsculas y minúsculas: <code>mmm-pages</code> y <code>MMM-pages</code> son carpetas diferentes. Si el nombre en config.js no coincide exactamente, MagicMirror no encuentra la carpeta y el módulo no carga. En Windows no falla porque NTFS no distingue mayúsculas, pero es importante para la portabilidad a Raspberry Pi (Linux).
+</div>
+
+<div class="problem"><strong>¿Qué es un módulo "fijo" en MMM-pages?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Un módulo fijo (declarado en el array <code>fixed</code> de MMM-pages) es un módulo que permanece visible en todas las páginas. MMM-pages nunca le aplica <code>display: none</code>. Están ahí porque su información o funcionalidad es relevante siempre: <code>newsfeed</code> mantiene el contexto informativo continuo, <code>MMM-Page-Indicator</code> siempre muestra en qué página estás, <code>MMM-Remote-Control</code> necesita estar activo para recibir comandos de la API, y <code>alert</code> necesita estar disponible en caso de que cualquier módulo emita una notificación de alerta.
+</div>
+
+<!-- ── APIs ── -->
+<h3>Sobre las APIs externas</h3>
+
+<div class="problem"><strong>¿Por qué OpenWeatherMap y no otra API del tiempo?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El módulo nativo <code>weather</code> de MagicMirror soporta OpenWeatherMap de forma nativa con la versión 2.5 de la API, que es completamente gratuita sin necesidad de tarjeta de crédito. Otras APIs del tiempo o bien requieren pago o bien requieren adaptadores de módulo personalizados. El criterio fue: funcionalidad completa, coste cero, sin registro de métodos de pago. OpenWeatherMap cumple los tres.
+</div>
+
+<div class="problem"><strong>¿Qué pasaría si se agota el límite gratuito de OpenWeatherMap?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El plan gratuito de OpenWeatherMap (API 2.5) permite 60 peticiones por minuto y 1.000.000 de peticiones al mes. Con <code>updateInterval: 600000</code> (cada 10 minutos) para el tiempo actual y 30 minutos para la previsión, el espejo hace en total unas 6 peticiones por hora, 144 por día, unos 4.320 al mes. Estamos muy lejos del límite. Si se llegara, la API devolvería error 429 Too Many Requests y el módulo dejaría de actualizar, pero no crashearía.
+</div>
+
+<div class="problem"><strong>¿Por qué Yahoo Finance y no una API de cotizaciones oficial?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Las APIs financieras oficiales (Alpha Vantage, Polygon, IEX Cloud) requieren registro y tienen límites bastante bajos en sus planes gratuitos, especialmente para datos en tiempo real. Yahoo Finance ofrece datos sin autenticación, sin límite conocido para consultas normales y con soporte para criptomonedas, acciones, ETFs y futuros. La contrapartida es que no hay garantía de estabilidad: Yahoo podría cambiar o cerrar esta API en cualquier momento. Es un compromiso consciente: gratuito y funcional ahora, potencialmente roto en el futuro.
+</div>
+
+<div class="problem"><strong>¿Qué es RSS y por qué sigue usándose?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  RSS (Really Simple Syndication) es un estándar basado en XML que lleva activo desde 1999. Los medios de comunicación publican sus titulares en un archivo XML con una URL fija que cualquiera puede descargar. No requiere autenticación, no tiene límite de peticiones y no cambia: el formato es estable desde hace décadas. Los medios lo mantienen porque es la forma más sencilla de distribuir contenido a agregadores, apps y otros sistemas. Para este proyecto es ideal: gratuito, sin API key, múltiples fuentes, formato estándar.
+</div>
+
+<!-- ── Seguridad y comunicaciones ── -->
+<h3>Seguridad y comunicaciones</h3>
+
+<div class="problem"><strong>¿Por qué la API REST no tiene autenticación? ¿No es un riesgo?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Se configuró <code>secureEndpoints: false</code> porque el espejo opera en una red local privada (192.168.18.x). En una red local doméstica, solo los dispositivos conectados al mismo router pueden acceder a esa IP. No está expuesto a internet. El riesgo es bajo y el beneficio es alto: cualquier dispositivo de la red (móvil, tablet) puede controlar el espejo sin tener que introducir credenciales. Si se quisiera exponer a internet (por ejemplo con un puerto forward en el router), sería imprescindible activar la autenticación con token configurando <code>apiKey</code> en MMM-Remote-Control.
+</div>
+
+<div class="problem"><strong>¿Qué es OAuth 2.0 y por qué es necesario para Spotify?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  OAuth 2.0 es un protocolo de autorización que permite que una aplicación acceda a recursos de un servicio (en este caso Spotify) en nombre de un usuario, sin que ese usuario entregue su contraseña a la aplicación. El flujo es: el usuario autoriza la aplicación en la web de Spotify → Spotify entrega un código → la aplicación intercambia ese código por un token de acceso. El token tiene permisos limitados (solo los definidos en el scope) y caduca cada hora. Spotify lo exige porque si la aplicación tuviera la contraseña del usuario y sufriera una brecha, comprometería la cuenta entera. Con OAuth, lo máximo que se puede comprometer es el token, que caduca.
+</div>
+
+<div class="problem"><strong>¿Qué diferencia hay entre access_token y refresh_token?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El <code>access_token</code> es el token que se incluye en cada petición a la API de Spotify para demostrar que tienes permiso. Es de corta duración: caduca en 1 hora. El <code>refresh_token</code> es un token permanente (no caduca normalmente) que se usa exclusivamente para obtener un nuevo <code>access_token</code> cuando el anterior caduca. El usuario solo tiene que autorizar la app una vez; después, el módulo renueva el acceso automáticamente usando el refresh_token, sin que el usuario vuelva a intervenir.
+</div>
+
+<div class="problem"><strong>¿Qué es X-Frame-Options y por qué bloqueaba las imágenes?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  <code>X-Frame-Options</code> es una cabecera HTTP de seguridad que un servidor puede enviar para indicar al navegador que no permita que su contenido sea mostrado dentro de un elemento <code>&lt;iframe&gt;</code>. Existe para prevenir ataques de clickjacking: técnica donde un atacante pone un sitio legítimo en un iframe invisible encima de su propio contenido, engañando al usuario para que haga clic en cosas sin saberlo. Muchos CDNs de imágenes envían esta cabecera. Nuestro workaround: en lugar de poner la URL de la imagen directamente en el iframe, se carga <code>img.html</code> (servido por localhost, sin esta restricción), y ese HTML usa una etiqueta <code>&lt;img&gt;</code> para cargar la imagen. Una etiqueta <code>&lt;img&gt;</code> no tiene restricciones de X-Frame-Options.
+</div>
+
+<div class="problem"><strong>¿Qué es Socket.io? ¿No es lo mismo que WebSocket?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  WebSocket es el protocolo estándar del navegador para conexiones persistentes bidireccionales. Socket.io es una librería que usa WebSocket por defecto, pero añade funcionalidades extra: reconexión automática, fallback a HTTP long-polling si WebSocket no está disponible, y sobre todo el sistema de "rooms" y "eventos con nombre" que facilita el desarrollo. En MagicMirror, Socket.io permite que cada módulo emita notificaciones con nombre (como <code>"WEATHER_DATA"</code>) y que solo los suscriptores a ese nombre las reciban. Con WebSocket puro habría que gestionar manualmente el enrutamiento de mensajes.
+</div>
+
+<!-- ── Técnicas avanzadas ── -->
+<h3>Técnicas y decisiones avanzadas</h3>
+
+<div class="problem"><strong>¿Cómo funciona exactamente el cambio de página sin recargar la web?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  MMM-pages no navega a ninguna URL nueva ni recarga el DOM. Todos los módulos están siempre presentes en el HTML de la página, cargados en memoria. Cuando llega la notificación <code>PAGE_CHANGED</code> con el índice de la nueva página, MMM-pages recorre su lista de módulos y aplica <code>element.style.display = "none"</code> a los que no pertenecen a esa página, y <code>element.style.display = "block"</code> a los que sí pertenecen. Es puro CSS con JavaScript. La transición de 1 segundo es un <code>opacity</code> en CSS. El resultado es un cambio inmediato y suave sin ningún coste de recarga de red.
+</div>
+
+<div class="problem"><strong>¿Qué es un node_helper y por qué no puede hacer peticiones HTTP el módulo frontend directamente?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Técnicamente, el módulo frontend (que corre en Chromium) sí podría hacer peticiones HTTP. Pero hay tres razones para separarlo: 1) <strong>Seguridad</strong>: la API key (de OpenWeatherMap, por ejemplo) no debería estar expuesta en el código del frontend, que el usuario puede ver con DevTools. En el node_helper corre en Node.js, fuera del contexto del navegador. 2) <strong>Módulos de Node.js</strong>: el node_helper puede usar módulos npm como <code>axios</code>, <code>moment</code>, <code>fs</code>, que no están disponibles en el entorno del navegador. 3) <strong>Arquitectura</strong>: la separación de responsabilidades hace el código más mantenible.
+</div>
+
+<div class="problem"><strong>¿Por qué se usa Moment.js para las fechas y no el objeto Date de JavaScript?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El objeto <code>Date</code> de JavaScript tiene una API poco ergonómica para formatear fechas y trabajar con zonas horarias. Moment.js permite escribir <code>moment().format("dddd, D MMMM")</code> en lugar de concatenar manualmente <code>date.getDay()</code>, <code>date.getMonth()</code>, etc. También maneja mejor la internacionalización y las zonas horarias con la extensión <code>moment-timezone</code>. MagicMirror usa Moment.js en varios módulos internos, por eso está disponible como dependencia global.
+</div>
+
+<div class="problem"><strong>¿Por qué las imágenes de la galería están en una subcarpeta (<code>imagenes_a_mostrar/</code>) y no directamente en la carpeta del módulo?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Separar las imágenes del código del módulo es una práctica de organización. La carpeta del módulo contiene archivos de código (<code>.js</code>, <code>.css</code>, <code>package.json</code>). Mezclar imágenes con código dificulta: 1) encontrar rápidamente qué es código y qué son recursos, 2) hacer actualizaciones del módulo sin borrar accidentalmente las imágenes, 3) gestionar el control de versiones (las imágenes suelen estar en <code>.gitignore</code> si son grandes). Con la subcarpeta, la separación es explícita.
+</div>
+
+<div class="problem"><strong>¿Qué diferencia hay entre <code>updateInterval</code> y <code>reloadInterval</code> en el módulo newsfeed?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  Son dos ciclos de tiempo completamente distintos. <code>updateInterval</code> (7.500 ms) controla con qué frecuencia cambia el titular visible en pantalla: cada 7,5 segundos se pasa al siguiente titular de la cola local. <code>reloadInterval</code> (300.000 ms = 5 minutos) controla con qué frecuencia el módulo hace una petición de red para descargar el XML RSS de los medios y refrescar la cola con titulares nuevos. El primero es un cambio visual local; el segundo es una petición de red.
+</div>
+
+<div class="problem"><strong>¿Cómo se añadiría una imagen nueva a la galería?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El proceso es: 1) Copiar el archivo de imagen a <code>modules/MMM-SmartWebDisplay/imagenes_a_mostrar/</code>. 2) Añadir una nueva URL al array <code>url</code> en config.js siguiendo el mismo patrón: <code>"http://localhost:8080/modules/MMM-SmartWebDisplay/img.html?src=http://localhost:8080/modules/MMM-SmartWebDisplay/imagenes_a_mostrar/nombre_nuevo.jpg"</code>. 3) Reiniciar MagicMirror con <code>pm2 restart MagicMirror</code>. No hay que tocar ningún otro archivo.
+</div>
+
+<div class="problem"><strong>¿Por qué el espejo necesita que la pantalla sea retroiluminada y no solo cualquier pantalla?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  El efecto del espejo inteligente se consigue poniendo una pantalla retroiluminada detrás de un espejo semitransparente (vidrio con una capa fina de plata o espejo acrílico). La clave es el contraste: el fondo negro de MagicMirror no emite luz → el espejo lo refleja normalmente. Los elementos blancos o luminosos (texto, iconos) sí emiten luz → esa luz atraviesa el espejo semitransparente y es visible. En una pantalla normal encendida sin retroiluminación controlada (como una pantalla de papel electrónico), el efecto no funciona porque no hay suficiente diferencia de luminosidad.
+</div>
+
+<div class="problem"><strong>¿Qué es MIT License y qué implica para este proyecto?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  La licencia MIT es una licencia de software libre extremadamente permisiva. Permite usar, copiar, modificar, distribuir e incluso vender el software, con la única condición de mantener el aviso de copyright original. Para este proyecto implica que se puede usar MagicMirror² y todos sus módulos sin coste, modificarlos si es necesario, y distribuir el resultado. No hay obligación de publicar las modificaciones (a diferencia de GPL). Es la licencia más común en el ecosistema Node.js/npm.
+</div>
+
+<div class="problem"><strong>¿Cómo se escala este proyecto si se quisiera añadir más funcionalidades?</strong></div>
+<div class="solution">
+  <strong>Respuesta</strong>
+  La arquitectura modular de MagicMirror facilita la escalabilidad. Para añadir funcionalidades: 1) Si existe un módulo de la comunidad (hay más de 1.500), se instala y configura. 2) Si no existe, se crea un módulo nuevo con su archivo <code>NombreModulo.js</code> (frontend) y opcionalmente su <code>node_helper.js</code> (backend). 3) Para añadir más páginas, se añade un sub-array más en la configuración de MMM-pages y se actualiza <code>pages: N</code> en MMM-Page-Indicator. El núcleo de MagicMirror no se toca nunca; toda la funcionalidad vive en módulos independientes.
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CONCLUSIÓN
+═══════════════════════════════════════════════ -->
+<div class="closing">
+  <h3>Conclusión</h3>
+  <p>Este proyecto integra <strong>múltiples APIs externas</strong>, un sistema de <strong>autenticación OAuth 2.0</strong>, una <strong>API REST propia</strong>, una arquitectura <strong>cliente-servidor en tiempo real</strong> y una solución creativa a un problema de seguridad web (<em>X-Frame-Options</em>), todo sobre una plataforma modular de código abierto.</p>
+  <p style="margin-top:12px">Cada decisión técnica tiene un motivo concreto: funcionalidad, compatibilidad, coste cero y facilidad de mantenimiento.</p>
+</div>
+
+<hr>
+
+<!-- Footer con créditos -->
+<footer>
+  <p>MagicMirror² v2.34.0 · Valencia, España</p>
+  <p style="margin-top:4px">
+    &copy; 2026 — Proyecto personal. Construido sobre
+    <a href="https://magicmirror.builders" style="color:#3b82f6">MagicMirror²</a> (MIT License).<br>
+    Módulos: MMM-Remote-Control (Jopyth) · MMM-pages &amp; MMM-Page-Indicator (edward-shen) ·
+    MMM-Jast (jalibu) · MMM-Spotify (skuethe) · MMM-SmartWebDisplay (AgP42).<br>
+    APIs: OpenWeatherMap · Spotify · Yahoo Finance · RSS feeds.
+  </p>
+</footer>
+
+</div><!-- fin .wrap -->
+</body>
+</html>

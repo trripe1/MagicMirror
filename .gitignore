@@ -58,6 +58,7 @@ Temporary Items
 /modules/*
 !/modules/default
 
+
 # Ignore changes to the custom css files but keep the sample and main.
 /css/*
 !/css/custom.css.sample
@@ -88,3 +89,7 @@ yarn.lock
 
 # Vitest temporary test files
 tests/**/.tmp/
+
+# Archivos locales sin utilidad en el repo
+magicmirror_backup_total.tar.gz
+core.*
